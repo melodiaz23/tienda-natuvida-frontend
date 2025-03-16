@@ -2,8 +2,9 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { createUrl } from '@/lib/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function Search() {
+function SearchForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -38,6 +39,14 @@ export default function Search() {
         <MagnifyingGlassIcon className="h-4" />
       </div>
     </form>
+  );
+}
+
+export default function Search() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchForm />
+    </Suspense>
   );
 }
 
