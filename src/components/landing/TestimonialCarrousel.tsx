@@ -70,11 +70,11 @@ const TestimonialCarrousel = () => {
         <div className="w-10">
           <Arrow
             left
-            onClick={(e) => e.stopPropagation() || instanceRef.current?.prev()}
+            onClick={(e) => { e.stopPropagation(); instanceRef.current?.prev(); }}
             disabled={currentSlide === 0}
           />
           <Arrow
-            onClick={(e) => e.stopPropagation() || instanceRef.current?.next()}
+            onClick={(e) => { e.stopPropagation(); instanceRef.current?.next(); }}
             disabled={currentSlide === testimonialImages.length - 1}
           />
         </div>
@@ -97,7 +97,7 @@ const TestimonialCarrousel = () => {
 function Arrow(props: {
   disabled: boolean;
   left?: boolean;
-  onClick: (e: any) => void;
+  onClick: (e: React.MouseEvent<SVGElement>) => void;
 }) {
   const disabled = props.disabled ? ' arrow--disabled' : '';
   return (

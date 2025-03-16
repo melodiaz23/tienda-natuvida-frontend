@@ -1,6 +1,6 @@
 import { Inter, Open_Sans } from 'next/font/google';
 // import { cookies } from 'next/headers';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import './globals.css';
 import Footer from '@/components/layouts/Footer';
 import ToastProvider from '@/components/providers/toast.provider';
@@ -45,15 +45,17 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="es">
       <body className={`${inter.className} ${openSans.className} w-full`}>
-        <ToastProvider>
-          {/* <CartProvider cartPromise={cart}> */}
-          <Navbar />
-          <main>
-            {children}
-          </main>
-          <Footer />
-          {/* </CartProvider> */}
-        </ToastProvider>
+        <Suspense fallback={<div>Loading...</div>}>
+          <ToastProvider>
+            {/* <CartProvider cartPromise={cart}> */}
+            <Navbar />
+            <main>
+              {children}
+            </main>
+            <Footer />
+            {/* </CartProvider> */}
+          </ToastProvider>
+        </Suspense>
       </body>
     </html>
   );

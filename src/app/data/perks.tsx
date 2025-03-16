@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 export const perks: Record<string, JSX.Element[]> = {
   salud: [
     <span key="salud-1">
@@ -76,7 +78,7 @@ const uniqueElements = (elements: JSX.Element[]) => {
   const seen = new Set();
   return elements.filter((element) => {
     const textContent = element.props.children
-      .map((child: any) =>
+      .map((child: JSX.Element) =>
         typeof child === 'string' ? child : child.props.children
       )
       .join('');
