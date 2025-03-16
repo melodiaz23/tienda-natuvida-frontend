@@ -1,13 +1,18 @@
+import Link from "next/link";
+
 export default function ComingSoon() {
-  return (<div className="bg-gray-100 dark:bg-gray-800">
+  return (<div className="bg-gray-100 dark:bg-green-dark">
     <div className="min-h-screen flex items-center justify-center">
       <div className="max-w-2xl w-full px-4">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white">Muy pronto!</h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300 text-center mb-12">Sitio en Construcción</p>
-        <form className="flex flex-col md:flex-row justify-center items-center gap-4">
-          <input className="w-full md:w-80  py-2 px-4 border text-gray-800 dark:text-white border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700" type="email" placeholder="Enter your email address" />
-          <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 border dark:bg-blue-800">Notify Me</button>
-        </form>
+        <h1 className="text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white">¡Muy pronto!</h1>
+        <p className="text-lg text-gray-600 dark:text-gray-300 text-center">Sitio en Construcción</p>
+        <div className="flex flex-wrap justify-center p-4 text-2xl">
+          <Link
+            href={'https://api.whatsapp.com/send?phone=573208680091&text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20Natuvida'}
+            className="inline-block w-1/2 bg-gray-950 text-white font-bold text-l p-2 m-4 rounded text-center">
+            Escríbenos
+          </Link>
+        </div>
       </div>
     </div>
   </div>
