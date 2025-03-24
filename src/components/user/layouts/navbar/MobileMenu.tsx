@@ -5,7 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { Fragment, Suspense, useEffect, useState } from 'react';
 
 import { Bars3Icon } from '@heroicons/react/24/outline';
-import { Menu } from '@/types/shopTypes';
+import { Menu } from '@/types/shop.types';
 import Search, { SearchSkeleton } from './Search';
 
 
