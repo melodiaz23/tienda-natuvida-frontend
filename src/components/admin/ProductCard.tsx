@@ -1,8 +1,11 @@
+'use client';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Product } from '@/types/product.types';
 
 function ProductCard(product: Product) {
+
+
   return (
     <Link href={`/dashboard/productos/${product.id}`}>
       <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-200">
@@ -21,6 +24,7 @@ function ProductCard(product: Product) {
                 src={product.primaryImageUrl}
                 alt={product.name}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-contain rounded-md"
               />
             ) : (

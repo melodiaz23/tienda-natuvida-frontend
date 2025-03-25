@@ -74,7 +74,7 @@ export default function ProductImagesManager({ images, onChange, productName = '
           <p className="text-sm font-medium text-gray-700 mb-2">Imágenes añadidas ({images.length}):</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {images.map((image) => (
-              <div key={image.id} className="relative border rounded-md p-2">
+              <div key={image.id + "-temp-" + images.length} className="relative border rounded-md p-2">
                 <div className={`${image.isPrimary ? 'ring-1 ring-green-dark/60' : ''}`}>
                   <div className="relative h-32 w-full">
                     <Image

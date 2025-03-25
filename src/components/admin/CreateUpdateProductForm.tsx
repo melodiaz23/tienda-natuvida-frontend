@@ -1,16 +1,22 @@
 'use client';
-import { ProductRequest } from '@/types/product.types';
-import { useState } from 'react';
+import { Product, ProductRequest } from '@/types/product.types';
+import { useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 import ProductImagesManager from './ProductImagesManager';
+import { productService } from '@/services/productService';
+import { useRouter } from 'next/navigation';
+import { categoryService } from '@/services/categoryService';
+import { Category } from '@/types/category.types';
 
 interface CreateUpdateProductFormProps {
-  onSubmit: (data: ProductRequest) => Promise<unknown>;
-  initialData?: ProductRequest;
+  // onSubmit: (data: ProductRequest) => Promise<unknown>;
+  initialData?: Product;
 }
 
+export default function CreateUpdateProductForm({ initialData }: CreateUpdateProductFormProps) {
 
-export default function CreateUpdateProductForm({ onSubmit, initialData }: CreateUpdateProductFormProps) {
+  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const [formData, setFormData] = useState<ProductRequest>(initialData || {
     name: '',
@@ -28,6 +34,20 @@ export default function CreateUpdateProductForm({ onSubmit, initialData }: Creat
     images: [],
   });
 
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await categoryService.getAllCategories();
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        toast.error("Error al cargar las categorías");
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const validateForm = (): boolean => {
     let isValid = true;
@@ -74,39 +94,38 @@ export default function CreateUpdateProductForm({ onSubmit, initialData }: Creat
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (validateForm()) {
       const toastId = toast.loading('Guardando producto...');
       try {
         const processedData = {
           ...formData,
-          images: formData.images?.map(img => ({
-            ...img,
-            isNew: img.id.startsWith('temp-') // Flag temporary IDs
-          }))
+          images: formData.images?.map(img => {
+            if (img && img.id) {
+              return {
+                ...img,
+                isNew: typeof img.id === 'string' && img.id.startsWith('temp-')
+              };
+            }
+            return img;
+          }).filter(Boolean) // Filter out any undefined values
         };
-        await onSubmit(processedData);
+
+        if (initialData) {
+          await productService.updateProduct(initialData.id, processedData);
+        } else {
+          await productService.createProduct(processedData);
+        }
+
         toast.update(toastId, {
           render: 'Producto guardado',
           type: 'success',
           isLoading: false,
           autoClose: 3000,
         });
-        setFormData({
-          name: '',
-          description: '',
-          preparation: '',
-          ingredients: '',
-          pricing: {
-            id: undefined,
-            unitPrice: 0,
-            priceTwoUnits: 0,
-            priceThreeUnits: 0,
-            previousPrice: 0,
-          },
-          categoryId: '',
-          images: [],
-        });
-      } catch {
+        router.push('/dashboard/productos');
+      } catch (error) {
+        console.error("Error saving product:", error);
         toast.update(toastId, {
           render: 'Error al guardar el producto',
           type: 'error',
@@ -117,6 +136,27 @@ export default function CreateUpdateProductForm({ onSubmit, initialData }: Creat
     }
   };
 
+  const handleCancel = () => {
+    router.push('/dashboard/productos');
+  };
+
+  const handleDelete = async () => {
+    if (!initialData?.id) {
+      toast.error('Error al encontrar el producto');
+      return;
+    }
+
+    try {
+      if (confirm('¿Está seguro que desea eliminar este producto?')) {
+        await productService.deleteProduct(initialData.id);
+        toast.success('Producto eliminado con éxito');
+        router.push('/dashboard/productos');
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      toast.error('No se pudo eliminar el producto');
+    }
+  };
 
   return (
     <div className="container mx-auto max-w-3xl">
@@ -265,30 +305,38 @@ export default function CreateUpdateProductForm({ onSubmit, initialData }: Creat
             <select
               id="categoryId"
               name="categoryId"
-              value={formData.categoryId}
+              value={formData.categoryId || ''}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-dark focus:border-green-dark"
             >
-              {/* TODO: SHOW CATEGORY LIST */}
-              {
-                initialData?.categoryId && (
-                  <option value={initialData.categoryId}>Categoría</option>
-                )
-              }
+              <option value="">Seleccionar categoría</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="flex justify-end gap-3">
             <button
               type="button"
+              onClick={handleCancel}
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
             >
               Cancelar
             </button>
+            {initialData?.id && <button
+              type="button"
+              onClick={handleDelete}
+              className="px-4 py-2 bg-red-300 text-gray-900 rounded-md hover:bg-red-400"
+            >
+              Eliminar
+            </button>}
             <button
               type="submit"
               className="px-4 py-2 bg-green-dark/90 text-white rounded-md hover:bg-green-dark focus:outline-none focus:ring-2 focus:ring-whiteygreen focus:ring-offset-2"
             >
-              Guardar
+              {initialData?.id ? 'Actualizar' : 'Guardar'}
             </button>
           </div>
         </form>

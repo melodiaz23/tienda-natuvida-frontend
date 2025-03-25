@@ -13,26 +13,33 @@ export default function Sidebar() {
               Panel
             </Link>
           </li>
-          <li>
-            <Link href="/dashboard/products" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
-              Productos
-            </Link>
-          </li>
-          <li>
-            <Link href="/dashboard/orders" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
-              Ordenes
-            </Link>
-          </li>
-          <li>
-            <Link href="/dashboard/categories" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
-              Categorias
-            </Link>
-          </li>
-          <li className="pt-4 mt-4 border-t">
-            <Link href="/" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
-              Back to Store
-            </Link>
-          </li>
+          <div className="ml-2">
+            <li>
+              <Link href="/dashboard/productos" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
+                Productos
+              </Link>
+            </li>
+            <li>
+              <Link href="/dashboard/ordenes" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
+                Ordenes
+              </Link>
+            </li>
+            <li>
+              <Link href="/dashboard/clientes" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
+                Clientes
+              </Link>
+            </li>
+            <li>
+              <Link href="/dashboard/categorias" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
+                Categorias
+              </Link>
+            </li>
+            <li className="pt-4 mt-4 border-t">
+              <Link href="/" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
+                Back to Store
+              </Link>
+            </li>
+          </div>
         </ul>
       </nav>
     </div>
