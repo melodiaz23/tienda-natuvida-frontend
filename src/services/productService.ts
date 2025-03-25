@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../utils/api";
 import { ApiResponse } from "@/types/api.types";
 import { ProductRequest } from "@/types/product.types";
 import { Product } from "@/types/product.types";
