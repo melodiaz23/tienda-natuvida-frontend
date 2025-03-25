@@ -69,10 +69,10 @@ export type Page = {
   updatedAt: string;
 };
 
-export type Product = Omit<ShopifyProduct, 'variants' | 'images'> & {
-  variants: ProductVariant[];
-  images: Image[];
-};
+// export type Product = Omit<ShopifyProduct, 'variants' | 'images'> & {
+//   variants: ProductVariant[];
+//   images: Image[];
+// };
 
 export type ProductOption = {
   id: string;

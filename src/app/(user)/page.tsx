@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import ComingSoon from '@/components/ComingSoon';
+import ComingSoon from '@/components/user/ComingSoon';
 
 export const metadata = {
   description: 'Tienda natuvida, tienda de salud y bienestar',

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-
 import Image from 'next/image';
 // import NavIcons from './NavIcons';
 import { Suspense } from 'react';
