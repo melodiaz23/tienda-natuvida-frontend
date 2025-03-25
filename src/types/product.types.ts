@@ -1,3 +1,4 @@
+import { Category } from "./category.types";
 import { OrderItem } from "./orderItem.types";
 
 export interface ProductPricing {
@@ -29,7 +30,7 @@ export interface ProductRequest {
   preparation?: string;
   ingredients?: string;
   pricing: ProductPricing;
-  categoryId: string;
+  categoryId?: string;
   images?: ProductImage[];
 }
 
@@ -42,14 +43,6 @@ export interface ProductImage {
   product?: Product;
 }
 
-export interface Category {
-  id: string;
-  name: string;
-  description: string;
-  // imageUrl: string; // TODO: Add this property to the API
-  createdAt: string;
-  updatedAt: string;
-}
 
 
 
