@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import logoNatuvida from '../../../../public/natuvida-logo.png';
-import { signOutAction } from '@/app/actions';
+import Link from 'next/link';
 
 interface propsUser {
   userName: string | null | undefined;
@@ -12,7 +12,7 @@ export default function HeaderDashboard(props: propsUser) {
   return (
     <>
       <div className="flex items-center justify-between p-2 lg:p-4 relative bg-slate-100">
-        <a
+        <Link
           href="/"
           className="">
           <Image
@@ -23,7 +23,7 @@ export default function HeaderDashboard(props: propsUser) {
             className="w-2/3 lg:w-full h-auto m-auto align-center"
             priority
           />
-        </a>
+        </Link>
         <div className="flex gap-3 items-center">
           <Image
             src={props.image ?? ''}
@@ -35,7 +35,7 @@ export default function HeaderDashboard(props: propsUser) {
           <div className="justify-self-end text-xs py-4">
             <p className="font-bold">{props.userName}</p>
             <p className="font-sm">{props.email}</p>
-            <button onClick={() => signOutAction()}>Logout</button>
+            <button>Logout</button>
           </div>
         </div>
       </div>
