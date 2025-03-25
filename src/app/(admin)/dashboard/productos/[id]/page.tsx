@@ -1,7 +1,9 @@
 import CreateUpdateProductForm from "@/components/admin/CreateUpdateProductForm";
 import { productService } from "@/services/productService";
 
-export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
+type PageProps = { params: Promise<{ id: string }> };
+
+export default async function EditProductPage({ params }: PageProps) {
   try {
     const resolvedParams = await params;
     const response = await productService.getProductById(resolvedParams.id);
