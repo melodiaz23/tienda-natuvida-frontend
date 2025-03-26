@@ -2,8 +2,19 @@ import axios from 'axios';
 
 // Create the base axios instance
 const createApiInstance = () => {
+
+  // Determine base URL based on environment
+  const getBaseUrl = () => {
+    // When running on the server during build
+    if (typeof window === 'undefined') {
+      return process.env.NEXT_PUBLIC_PRODUCTION_API_URL;
+    }
+    // In the browser, use the normal configuration
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
+  };
+
   const instance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1',
+    baseURL: getBaseUrl(),
     headers: {
       'Content-Type': 'application/json',
     },
