@@ -1,8 +1,9 @@
 import { Inter, Open_Sans } from 'next/font/google';
 // import { cookies } from 'next/headers';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 import './globals.css';
-import ToastProvider from '@/components/providers/toast.provider';
+import ToastProvider from '@/app/providers/toast.provider';
+import { Providers } from './providers/auth.provider';
 
 const { SITE_NAME } = process.env;
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
@@ -38,7 +39,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="es">
       <body className={`${inter.className} ${openSans.className} w-full`}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Providers>
           <ToastProvider>
             {/* <CartProvider cartPromise={cart}> */}
             <main>
@@ -46,7 +47,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             </main>
             {/* </CartProvider> */}
           </ToastProvider>
-        </Suspense>
+        </Providers>
       </body>
     </html>
   );
