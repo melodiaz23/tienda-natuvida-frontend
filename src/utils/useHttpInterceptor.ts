@@ -76,7 +76,7 @@ export const useHttpInterceptor = () => {
         return;
       }
     }
-    // Generic error fallback
+
     toast.error(defaultMessage);
   };
 
@@ -136,26 +136,28 @@ export const handleApiError = (
       return 'Error de servidor. Por favor, intenta más tarde.';
     }
 
-    // Handle ApiResponse error type
-    if (errorData && 'success' in errorData && !errorData.success) {
-      if (errorData.message) {
+    // Check if errorData exists before using 'in' operator
+    if (errorData) {
+      // Handle ApiResponse error type
+      if ('success' in errorData && !errorData.success) {
+        if (errorData.message) {
+          return errorData.message;
+        }
+        if (errorData.errors && errorData.errors.length > 0) {
+          return errorData.errors.join(', ');
+        }
+      }
+
+      // Handle ErrorResponse type
+      if ('code' in errorData && errorData.message) {
         return errorData.message;
       }
-      if (errorData.errors && errorData.errors.length > 0) {
-        return errorData.errors.join(', ');
-      }
-    }
-
-    // Handle ErrorResponse type
-    if (errorData && 'code' in errorData && errorData.message) {
-      return errorData.message;
     }
 
     // Network error
     if (error.message === 'Network Error') {
       return 'No fue posible conectarse al servidor, revisa tu conexión a internet.';
     }
-
     return error.message;
   }
 

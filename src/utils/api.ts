@@ -37,7 +37,6 @@ const createApiInstance = () => {
       response => response,
       async error => {
         const originalRequest = error.config;
-
         // If error is 401 (Unauthorized) and we haven't tried refreshing token yet
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
@@ -46,8 +45,6 @@ const createApiInstance = () => {
             const refreshToken = localStorage.getItem('refresh_token');
             if (!refreshToken) throw new Error('No refresh token available');
 
-            // Call refresh token endpoint with a separate axios instance
-            // to avoid interceptor loops
             const response = await axios.post(
               `${getBaseUrl()}${ApiPaths.AUTH}/refresh-token`,
               { refreshToken },
@@ -60,7 +57,6 @@ const createApiInstance = () => {
             // If token refresh successful
             if (response.data.success && response.data.data) {
               const { token, refreshToken: newRefreshToken } = response.data.data;
-
               // Store new tokens
               localStorage.setItem('auth_token', token);
               if (newRefreshToken) localStorage.setItem('refresh_token', newRefreshToken);
@@ -69,6 +65,13 @@ const createApiInstance = () => {
               originalRequest.headers['Authorization'] = `Bearer ${token}`;
               return instance(originalRequest);
             }
+
+            if (!error.response || error.message === 'Network Error') {
+              console.error('Network error detected:', error);
+              // You could emit an event or use a global state manager here
+              // But returning Promise.reject is correct to let services handle it
+            }
+
           } catch (refreshError) {
             console.log(refreshError);
             localStorage.removeItem('auth_token');
