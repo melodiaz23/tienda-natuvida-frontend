@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { useRouter } from "next/navigation";
 import { useAuth } from '@/context/AuthContext';
 import { FieldErrors, useForm } from "react-hook-form";
@@ -24,6 +25,8 @@ const LoginPage: React.FC = () => {
 
   const [mode, setMode] = useState(MODE.LOGIN);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
 
   const {
     register,
@@ -78,9 +81,10 @@ const LoginPage: React.FC = () => {
           email: (data as LoginSchema).email,
           password: (data as LoginSchema).password
         });
+
         if (response && response.success) {
-          // Si el login es exitoso, redirigir al usuario
-          router.push('/mi-cuenta');
+          const redirectUrl = response.data?.redirectUrl || '/mi-cuenta';
+          router.push(redirectUrl);
           router.refresh();
         }
       }
@@ -161,7 +165,7 @@ const LoginPage: React.FC = () => {
             </div>
 
             {(mode === MODE.LOGIN || mode === MODE.REGISTER) && (
-              <div className="mb-6">
+              <div className="mb-6 relative">
                 <label
                   htmlFor="password"
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -169,13 +173,59 @@ const LoginPage: React.FC = () => {
                   Contraseña
                 </label>
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   placeholder="Ingresa tu contraseña"
-                  autoComplete="current-password"
+                  autoComplete="on"
                   className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
                   {...register('password')}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-9 text-gray-500 focus:outline-none"
+                >
+                  {showPassword ? (
+                    <EyeSlashIcon className="h-5 w-5" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5" />
+                  )}
+                </button>
+                {(errors as FieldErrors<LoginSchema>).password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {(errors as FieldErrors<LoginSchema>).password?.message}
+                  </p>
+                )}
+              </div>
+            )}
+            {(mode === MODE.REGISTER) && (
+              <div className="mb-6 relative">
+                <label
+                  htmlFor="password2"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
+                  Repite la contraseña
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword2(!showPassword2)}
+                  className="absolute right-3 top-9 text-gray-500 focus:outline-none"
+                >
+                  {showPassword2 ? (
+                    <EyeSlashIcon className="h-5 w-5" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5" />
+                  )}
+                </button>
+                <input
+                  type={showPassword2 ? 'text' : 'password'}
+                  id="password2"
+                  placeholder="Repite la contraseña"
+                  autoComplete="on"
+                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
+                  {...register('password2')}
+                />
+
                 {(errors as FieldErrors<LoginSchema>).password && (
                   <p className="text-red-500 text-sm mt-1">
                     {(errors as FieldErrors<LoginSchema>).password?.message}
