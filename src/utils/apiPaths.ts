@@ -15,9 +15,11 @@ export const ApiPaths = {
   CART: API_BASE_PATH + '/cart',
 
   // Auth endpoints
-  AUTH: API_BASE_PATH + '/auth',
-  LOGIN: API_BASE_PATH + '/auth/login',
-  REGISTER: API_BASE_PATH + '/auth/register',
+  AUTH: `${API_BASE_PATH}/auth`,
+  LOGIN: `${API_BASE_PATH}/auth/login`,
+  REGISTER: `${API_BASE_PATH}/auth/register`,
+  REFRESH_TOKEN: `${API_BASE_PATH}/auth/refresh-token`, // Added this for consistency
+  LOGOUT: `${API_BASE_PATH}/auth/logout`, // Added this for clarity
 
   // OAuth endpoints
   OAUTH2: API_BASE + '/oauth2',

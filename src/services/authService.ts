@@ -21,25 +21,28 @@ const authService = {
   // Iniciar sesión
   login: async (credentials: LoginRequest): Promise<ApiResponse<AuthResponse>> => {
     try {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user');
+
+      // Eliminar cualquier header de autorización existente
+      delete api.defaults.headers.common['Authorization'];
+
       const response: AxiosResponse<ApiResponse<AuthResponse>> = await api.post(LOGIN, credentials);
 
       if (response.data.success && response.data.data) {
-        // Store access token
+        // Almacenar los tokens y datos del usuario
         if (response.data.data.token) {
           localStorage.setItem('auth_token', response.data.data.token);
-          api.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.token}`;
         }
-
-        // Store refresh token
         if (response.data.data.refreshToken) {
           localStorage.setItem('refresh_token', response.data.data.refreshToken);
         }
-
-        // Store user data
         if (response.data.data.user) {
           localStorage.setItem('user', JSON.stringify(response.data.data.user));
         }
       }
+
       return response.data;
     } catch (error) {
       throw error;
@@ -51,7 +54,7 @@ const authService = {
     try {
       const refreshToken = localStorage.getItem('refresh_token');
       if (refreshToken) {
-        await api.post(`${AUTH}/logout`, { refreshToken });
+        await api.post(ApiPaths.LOGOUT, { refreshToken });
       }
     } catch (error) {
       console.error('Error during server logout:', error);

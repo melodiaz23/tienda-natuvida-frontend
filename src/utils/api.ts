@@ -46,7 +46,7 @@ const createApiInstance = () => {
             if (!refreshToken) throw new Error('No refresh token available');
 
             const response = await axios.post(
-              `${getBaseUrl()}${ApiPaths.AUTH}/refresh-token`, // Review this path
+              ApiPaths.REFRESH_TOKEN,
               { refreshToken },
               {
                 baseURL: getBaseUrl(),
