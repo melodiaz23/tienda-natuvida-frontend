@@ -124,7 +124,7 @@ export const handleApiError = (
 
     // Status-based messages
     if (error.response?.status === 401) {
-      return 'Tu sesión ha expirado, por favor ingresa de nuevo.';
+      return 'Credenciales no válidas, por favor verifica.';
     }
     if (error.response?.status === 403) {
       return 'No tienes permiso para ejecutar esta acción';
