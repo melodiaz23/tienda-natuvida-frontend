@@ -6,7 +6,7 @@ export interface AuthContextType {
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
-  login: (credentials: LoginRequest) => Promise<ApiResponse<AuthResponse>>;
-  register: (userData: RegisterRequest) => Promise<ApiResponse<User>>;
+  login: (credentials: LoginRequest) => Promise<ApiResponse<AuthResponse | null>>;
+  register: (userData: RegisterRequest) => Promise<ApiResponse<User | null>>;
   logout: () => Promise<void>;
 }

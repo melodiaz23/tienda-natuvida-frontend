@@ -29,6 +29,7 @@ export interface AuthResponse {
   token: string;
   refreshToken: string;
   user: User;
+  redirectUrl: string
 }
 
 export interface AuthState {
