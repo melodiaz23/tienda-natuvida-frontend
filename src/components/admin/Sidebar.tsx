@@ -9,28 +9,28 @@ export default function Sidebar() {
       <nav className="p-4 flex-grow overflow-y-auto">
         <ul className="space-y-2">
           <li>
-            <Link href="/dashboard" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
+            <Link href="/admin/dashboard" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
               Panel
             </Link>
           </li>
           <div className="ml-2">
             <li>
-              <Link href="/dashboard/productos" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
+              <Link href="/admin/dashboard/productos" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
                 Productos
               </Link>
             </li>
             <li>
-              <Link href="/dashboard/ordenes" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
+              <Link href="/admin/dashboard/ordenes" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
                 Ordenes
               </Link>
             </li>
             <li>
-              <Link href="/dashboard/clientes" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
+              <Link href="/admin/dashboard/clientes" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
                 Clientes
               </Link>
             </li>
             <li>
-              <Link href="/dashboard/categorias" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
+              <Link href="/admin/dashboard/categorias" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
                 Categorias
               </Link>
             </li>
