@@ -4,7 +4,7 @@ export interface User {
   username: string;
   createdAt: string; // LocalDateTime en formato string
   updatedAt: string;
-  roles: Role[];
+  role: Role;
   enabled: boolean;
   isCustomer: boolean;
 }
