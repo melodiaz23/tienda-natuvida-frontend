@@ -34,6 +34,7 @@ const authService = {
         // Almacenar los tokens y datos del usuario
         if (response.data.data.token) {
           localStorage.setItem('auth_token', response.data.data.token);
+          document.cookie = `auth_token=${response.data.data.token}; path=/; max-age=${60 * 60 * 24 * 7}`;
         }
         if (response.data.data.refreshToken) {
           localStorage.setItem('refresh_token', response.data.data.refreshToken);
@@ -41,8 +42,11 @@ const authService = {
         if (response.data.data.user) {
           localStorage.setItem('user', JSON.stringify(response.data.data.user));
         }
+        // Al iniciar sesión exitosamente
+        if (response.data.data.user && response.data.data.user.role) {
+          document.cookie = `user_role=${response.data.data.user.role}; path=/; max-age=${60 * 60 * 24 * 7}`;
+        }
       }
-
       return response.data;
     } catch (error) {
       throw error;
@@ -62,6 +66,8 @@ const authService = {
       localStorage.removeItem('auth_token');
       localStorage.removeItem('refresh_token');
       localStorage.removeItem('user');
+      document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      document.cookie = "user_role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       delete api.defaults.headers.common['Authorization'];
     }
   },
