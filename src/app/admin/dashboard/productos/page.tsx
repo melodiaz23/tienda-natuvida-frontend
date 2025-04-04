@@ -18,7 +18,7 @@ export default async function AdminProductPage() {
         ))}
       </div>
       <div className="mt-4">
-        <Link href="/dashboard/productos/nuevo">
+        <Link href="/admin/dashboard/productos/nuevo">
           <button className="p-4 bg-green-dark rounded-xl text-whiteygreen font-bold">Adicionar Producto</button>
         </Link>
       </div>
