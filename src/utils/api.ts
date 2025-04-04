@@ -4,10 +4,12 @@ import ApiPaths from './apiPaths';
 const createApiInstance = () => {
 
   const getBaseUrl = () => {
-    // Use production URL when running on server during build
-    return typeof window === 'undefined'
-      ? process.env.NEXT_PUBLIC_PRODUCTION_API_URL
-      : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    if (isDevelopment) {
+      return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+    } else {
+      return process.env.NEXT_PUBLIC_PRODUCTION_API_URL;
+    }
   };
 
   const instance = axios.create({
@@ -68,8 +70,6 @@ const createApiInstance = () => {
 
             if (!error.response || error.message === 'Network Error') {
               console.error('Network error detected:', error);
-              // You could emit an event or use a global state manager here
-              // But returning Promise.reject is correct to let services handle it
             }
 
           } catch (refreshError) {
@@ -79,6 +79,8 @@ const createApiInstance = () => {
             localStorage.removeItem('user');
           }
         }
+
+
         return Promise.reject(error);
       }
     );
