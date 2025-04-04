@@ -1,5 +1,4 @@
 import { Category } from "./category.types";
-import { OrderItem } from "./orderItem.types";
 
 export interface ProductPricing {
   id: string | undefined;
@@ -13,16 +12,28 @@ export interface Product {
   id: string;
   name: string;
   description: string;
-  preparation: string;
-  ingredients: string;
-  pricing: ProductPricing;
-  category: Category | null;
+  presentation: string;
+  ingredients: string[];
+  benefits: string[];
+  tags: string[];
+  usageMode: string;
+  price: {
+    id: string;
+    unit: number;
+    twoUnits: number;
+    threeUnits: number;
+    threeByTwo: number | null;
+    fiveByThree: number | null;
+  };
+  categories: Category[];
   images: ProductImage[];
+  enabled: boolean;
   createdAt: string;
   updatedAt: string;
-  orderItems: OrderItem[];
-  primaryImageUrl: string | null;
+  primaryImageUrl?: string | null;
 }
+
+
 
 export interface ProductRequest {
   name: string;
@@ -30,8 +41,9 @@ export interface ProductRequest {
   preparation?: string;
   ingredients?: string;
   pricing: ProductPricing;
-  categoryId?: string;
+  categoryIds?: string[];
   images?: ProductImage[];
+  tags?: string[]; // Lista de tags para la creación/actualización
 }
 
 export interface ProductImage {
