@@ -1,9 +1,11 @@
 import { Inter, Open_Sans } from 'next/font/google';
 // import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
+import Providers from './providers/Providers';
 import './globals.css';
-import ToastProvider from '@/app/providers/toast.provider';
-import { Providers } from './providers/auth.provider';
+
+
+
 
 const { SITE_NAME } = process.env;
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
@@ -40,13 +42,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang="es">
       <body className={`${inter.className} ${openSans.className} w-full`}>
         <Providers>
-          <ToastProvider>
-            {/* <CartProvider cartPromise={cart}> */}
-            <main>
-              {children}
-            </main>
-            {/* </CartProvider> */}
-          </ToastProvider>
+          <main>
+            {children}
+          </main>
+
         </Providers>
       </body>
     </html>

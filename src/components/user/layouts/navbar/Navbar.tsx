@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Suspense } from 'react';
 import Search, { SearchSkeleton } from './Search';
 import MobileMenu from './MobileMenu';
+import NavIcons from './NavIcons';
 
 export default async function Navbar() {
   // const session = await auth(); // TODO: Add auth
@@ -41,7 +42,7 @@ export default async function Navbar() {
             </Link>
             <div className="hidden xl:flex items-center gap-4">
               <Link href="/">Inicio</Link>
-              <Link href="/">Tienda</Link>
+              <Link href="/tienda">Tienda</Link>
               <Link href="/">Ofertas</Link>
               <Link href="/">Contacto</Link>
             </div>
@@ -50,7 +51,7 @@ export default async function Navbar() {
             <Suspense fallback={<SearchSkeleton />}>
               <Search />
             </Suspense>
-            {/* <NavIcons session={session} /> */}
+            <NavIcons />
           </div>
         </div>
       </div>
