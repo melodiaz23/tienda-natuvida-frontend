@@ -1,9 +1,10 @@
 'use client';
+import useLocalStorage from '@/hooks/useLocalStorage';
 import { CartContextType, CartItem } from '@/types/cart.types';
 import { Product } from '@/types/product.types';
-import { createContext, useState } from 'react';
+import { createContext } from 'react';
 
-export const CartContext = createContext<CartContextType>({
+const initialCartContext: CartContextType = {
   items: [],
   addToCart: () => { },
   removeFromCart: () => { },
@@ -11,11 +12,13 @@ export const CartContext = createContext<CartContextType>({
   clearCart: () => { },
   getTotalItems: () => 0,
   getTotalPrice: () => 0
-});
+};
 
+
+export const CartContext = createContext<CartContextType>(initialCartContext);
 
 export default function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useLocalStorage<CartItem[]>('cart', []);
 
   const addToCart = (product: Product, quantity: number = 1) => {
     setItems((prevItems) => {
