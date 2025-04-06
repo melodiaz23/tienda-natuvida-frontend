@@ -1,6 +1,6 @@
 'use client';
 
-import OrdersInfo from "@/components/pages/dashboard/clients/OrdersInfo";
+import OrdersInfo from "@/components/user/OrdersInfo";
 
 // import { signOutAction } from '@/app/actions';
 // import { useSession } from 'next-auth/react';

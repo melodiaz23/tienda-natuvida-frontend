@@ -1,4 +1,4 @@
-import ProductCard from "@/components/admin/ProductCard";
+import ProductCard from "@/components/admin/products/ProductCard";
 import { productService } from "@/services/productService";
 
 export default async function AdminClientPage() {
