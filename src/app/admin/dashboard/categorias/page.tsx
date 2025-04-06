@@ -1,10 +1,14 @@
 import { categoryService } from "@/services/categoryService";
-import CreateUpdateCategoriesForm from "@/components/admin/CreateUpdateCategoriesForm";
-import CategoryCard from "@/components/admin/CategoryCard";
+import CreateUpdateCategoriesForm from "@/components/admin/categories/CreateUpdateCategoriesForm";
+import CategoryCard from "@/components/admin/categories/CategoryCard";
 
 export default async function AdminCategoriesPage() {
   const response = await categoryService.getAllCategories();
   const categories = response.data;
+
+  if (!categories) {
+    return <div>No hay categorías disponibles.</div>;
+  }
 
   return (
     <div className="p-4">
