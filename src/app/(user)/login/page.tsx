@@ -84,6 +84,7 @@ const LoginPage: React.FC = () => {
 
         if (response && response.success) {
           const redirectUrl = response.data?.redirectUrl || '/mi-cuenta';
+          toast.success('¡Inicio de sesión exitoso!');
           router.push(redirectUrl);
           router.refresh();
         }
