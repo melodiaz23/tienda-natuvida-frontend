@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import leaf from '../../../public/icons/leaf.svg';
-import { perks } from '../../app/(user)/data/perks';
+import { perks } from '../../app/(user)/(landing)/colageno-hidrolizado/data/perks';
 
 interface PropsPerks {
   interest: string;

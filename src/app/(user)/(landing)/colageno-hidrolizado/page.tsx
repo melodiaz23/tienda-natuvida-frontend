@@ -11,7 +11,7 @@ import heart from '../../../../../public/icons/heart-outline.svg';
 import FAQ from '@/components/landing/FAQ';
 import FooterLanding from '@/components/landing/FooterLanding';
 import { Suspense } from 'react';
-import Skeleton from '@/components/Skeleton';
+import Skeleton from '@/components/common/Skeleton';
 import Perks from '@/components/landing/Perks';
 import Difference from '@/components/landing/Difference';
 import TestimonialCarrousel from '@/components/landing/TestimonialCarrousel';
