@@ -7,12 +7,12 @@ function ProductCard(product: Product) {
 
 
   return (
-    <Link href={`/dashboard/productos/${product.id}`}>
+    <Link href={`/admin/dashboard/productos/${product.id}`}>
       <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-200">
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
-            <p className="text-gray-600 mt-1">${product.pricing && product.pricing.unitPrice}</p>
+            <p className="text-gray-600 mt-1">${product.price && product.price.unit}</p>
             <p className="text-sm text-gray-500 mt-2 line-clamp-2">{product.description}</p>
             <div className="mt-3">
             </div>

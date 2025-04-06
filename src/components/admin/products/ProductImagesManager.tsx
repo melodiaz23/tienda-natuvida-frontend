@@ -99,7 +99,7 @@ export default function ProductImagesManager({ images, onChange, productName = '
                 <div className="mt-2 flex justify-between items-center">
                   <button
                     type="button"
-                    onClick={() => setPrimaryImage(image.id)}
+                    onClick={() => image.id && setPrimaryImage(image.id)}
                     disabled={image.isPrimary}
                     className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded disabled:opacity-50"
                   >
@@ -107,7 +107,7 @@ export default function ProductImagesManager({ images, onChange, productName = '
                   </button>
                   <button
                     type="button"
-                    onClick={() => removeImage(image.id)}
+                    onClick={() => image.id && removeImage(image.id)}
                     className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
                   >
                     Eliminar
