@@ -1,6 +1,6 @@
 import { Category } from "./category.types";
 
-interface Price {
+export interface Price {
   id?: string;
   unit: number;
   twoUnits: number;
@@ -18,7 +18,7 @@ export interface Product {
   ingredients: string[];
   benefits: string[];
   tags: string[];
-  usageMode: string;
+  usageMode?: string;
   price: Price;
   categories: Category[];
   images: ProductImage[];
