@@ -2,6 +2,7 @@ export interface Category {
   id: string;
   name: string;
   description: string;
+  productIds: string[];
   // imageUrl: string; // TODO: Add this property to the API
   createdAt: string;
   updatedAt: string;
