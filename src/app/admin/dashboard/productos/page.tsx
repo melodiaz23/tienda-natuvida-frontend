@@ -1,5 +1,5 @@
 'use server';
-import ProductCard from "@/components/admin/ProductCard";
+import ProductCard from "@/components/admin/products/ProductCard";
 import { productService } from "@/services/productService";
 import Link from "next/link";
 
