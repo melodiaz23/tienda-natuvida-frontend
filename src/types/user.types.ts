@@ -1,12 +1,42 @@
 export interface User {
   id: string; // UUID en formato string
   email: string;
-  username: string;
+  name: string;
+  lastName: string;
+  phone: string;
   createdAt: string; // LocalDateTime en formato string
   updatedAt: string;
   role: Role;
   enabled: boolean;
-  isCustomer: boolean;
+  customer: boolean;
+  address?: string;
+  city?: string;
+}
+
+export interface ProfileRequest {
+  id: string;
+  email: string;
+  name: string;
+  lastName: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+}
+
+
+// src/types/customer.types.ts
+export interface Customer {
+  id: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  nationalId?: string;
+  address: string;
+  city: string;
+  enabled: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Role {
