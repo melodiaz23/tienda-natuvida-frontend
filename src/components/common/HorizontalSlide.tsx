@@ -3,7 +3,7 @@ import React from 'react';
 import { useKeenSlider } from 'keen-slider/react';
 import 'keen-slider/keen-slider.min.css';
 
-const animation = { duration: 35000, easing: (t: number) => t };
+const animation = { duration: 45000, easing: (t: number) => t };
 
 export default function HorizontalSlide() {
   // const [windowWidth, setWindowWidth] = useState(400);
@@ -43,21 +43,19 @@ export default function HorizontalSlide() {
         ref={sliderRef}
         className="keen-slider whitespace-nowrap w-fit hidden md:block">
         <div className="keen-slider__slide number-slide1 hidden md:block">
-          APROVECHA: PAGO CONTRAENTREGA + ENVÍO GRATIS :: POR TIEMPO LIMITADO ::
+          APROVECHA: PAGO CONTRAENTREGA + ENVÍO GRATIS
         </div>
         <div className="keen-slider__slide number-slide1 hidden md:block">
-          APROVECHA: PAGO CONTRAENTREGA + ENVÍO GRATIS :: POR TIEMPO LIMITADO ::
+          APROVECHA: PAGO CONTRAENTREGA + ENVÍO GRATIS
         </div>
       </div>
       <div
         ref={sliderRef}
         className="keen-slider whitespace-nowrap w-fit block md:hidden">
         <div className="keen-slider__slide number-slide1 block md:hidden">
-          APROVECHA: PAGO CONTRAENTREGA
+          APROVECHA: PAGO CONTRAENTREGA + ENVÍO GRATIS
         </div>
-        <div className="keen-slider__slide number-slide1 block md:hidden">
-          ENVÍO GRATIS :: POR TIEMPO LIMITADO ::
-        </div>
+
       </div>
     </>
   );
