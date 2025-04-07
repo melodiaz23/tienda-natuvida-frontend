@@ -1,6 +1,7 @@
 'use client'
-import { resetPassword } from "@/app/actions/authActions"
-import LoadingDots from "@/components/loading-dots"
+import LoadingDots from "@/components/common/LoadingDots"
+// import { resetPassword } from "@/app/actions/authActions"
+
 import { forgetPasswordSchema, ForgetPasswordSchema } from "@/lib/schemas/forgetPasswordSchema"
 import { ActionResult } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -19,8 +20,9 @@ export default function ResetPasswordForm() {
   })
 
   const onSubmit = async (data: ForgetPasswordSchema) => {
-    const getResult = await resetPassword(data.password, searhParams.get('token') as string)
-    setResult(getResult)
+    // TODO: Call the API to reset the password
+    // const getResult = await resetPassword(data.password, searhParams.get('token') as string)
+    // setResult(getResult)
     reset()
     if (result?.status === 'success') {
       toast.success(result?.data as string)
