@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
-import Skeleton from '@/components/Skeleton';
+import Skeleton from '@/components/common/Skeleton';
 import { Gallery } from '@/components/product/Gallery';
 import { ProductImage } from '@/types/product.types';
 import { productService } from '@/services/productService';
