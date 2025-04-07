@@ -16,7 +16,7 @@ import Perks from '@/components/landing/Perks';
 import Difference from '@/components/landing/Difference';
 import TestimonialCarrousel from '@/components/landing/TestimonialCarrousel';
 import CountdownTimer from '@/components/landing/CountdownTimer';
-import HorizontalSlide from '@/components/user/HorizontalSlide';
+import HorizontalSlide from '@/components/common/HorizontalSlide';
 
 
 export default function Page() {
