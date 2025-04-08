@@ -11,7 +11,7 @@ export default function AdminDashboard() {
         <DashboardCard
           title="Productos"
           count="Administración de productos"
-          link="/dashboard/productos"
+          link="/admin/dashboard/productos"
           icon="📦"
         />
 
@@ -19,7 +19,7 @@ export default function AdminDashboard() {
         <DashboardCard
           title="Ordenes"
           count="Ver nuevas órdenes"
-          link="/dashboard/ordenes"
+          link="/admin/dashboard/ordenes"
           icon="🛒"
         />
 
@@ -27,7 +27,7 @@ export default function AdminDashboard() {
         <DashboardCard
           title="Clientes"
           count="Manejo de clientes"
-          link="/dashboard/customers"
+          link="/admin/dashboard/customers"
           icon="👤"
         />
 
@@ -35,7 +35,7 @@ export default function AdminDashboard() {
         <DashboardCard
           title="Categorías"
           count="Administración de categorías"
-          link="/dashboard/categorias"
+          link="/admin/dashboard/categorias"
           icon="🏷️"
         />
       </div>
