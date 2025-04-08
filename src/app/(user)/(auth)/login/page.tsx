@@ -91,7 +91,7 @@ const LoginPage: React.FC = () => {
 
       else if (mode === MODE.RESET_PASSWORD) {
         // Implement password reset functionality
-        toast.info('Se ha enviado un correo de restablecimiento de contraseña si el email existe en nuestro sistema.');
+        toast.info('Si el email existe en nuestro sistema, se ha enviado un correo de restablecimiento de contraseña');
         setMode(MODE.LOGIN);
       }
     } finally {
