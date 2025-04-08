@@ -3,7 +3,7 @@
 // import LoadingDots from "@/components/common/loading-dots";
 // import ResultMessage from "../../../components/auth/ResultMessage";
 
-export default async function VerifyEmailPage({ searchParams }: { searchParams: { token: string } }) {
+export default async function VerifyEmailPage() {
   // TODO: Verify email
   // const result = await verifyEmail(searchParams.token);
 
