@@ -1,9 +1,7 @@
-import ResetPasswordForm from "./ResetPasswordForm";
-
 export default function ResetPasswordPage() {
   return (
     <div>
-      <ResetPasswordForm />
+      {/* TODO: Implement password form */}
     </div>
   )
 }
