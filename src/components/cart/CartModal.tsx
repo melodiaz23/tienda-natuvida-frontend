@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useContext } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { GrCart } from "react-icons/gr";
+import { RiShoppingCart2Line } from 'react-icons/ri';
 import Link from 'next/link';
 import { CartContext } from '@/context/CartContext';
 
@@ -36,7 +36,7 @@ export default function CartModal() {
         onClick={openCart}
         className="flex items-center"
       >
-        <GrCart className="h-6 w-6" />
+        <RiShoppingCart2Line size={24} className='text-green-dark' />
         {getTotalItems() > 0 && (
           <span className="absolute -top-2 -right-2 bg-green-dark text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
             {getTotalItems()}
@@ -56,7 +56,7 @@ export default function CartModal() {
           <div className="p-4 h-[calc(100vh-180px)] overflow-auto">
             {items.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full">
-                <GrCart className="h-16 w-16 text-gray-400" />
+                <RiShoppingCart2Line className="h-16 w-16 text-gray-400" />
                 <p className="mt-2 text-gray-500">Tu carrito está vacío</p>
               </div>
             ) : (

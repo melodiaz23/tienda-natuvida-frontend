@@ -11,6 +11,7 @@ import { RestartPasswordSchema, restartPasswordSchema } from "@/lib/schemas/rest
 import { toast } from "react-toastify";
 import LoadingDots from "@/components/common/LoadingDots";
 import SocialLogin from '@/components/auth/SocialLogin';
+// import Skeleton from '@/components/common/Skeleton';
 
 enum MODE {
   LOGIN = "LOGIN",
@@ -299,4 +300,13 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+
+function Page() {
+  return (
+
+    <LoginPage />
+
+  );
+}
+
+export default Page;

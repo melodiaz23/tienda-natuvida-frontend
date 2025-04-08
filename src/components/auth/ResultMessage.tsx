@@ -1,15 +1,13 @@
 'use client'
-import { ActionResult } from "@/types"
+
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
 import { FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 
-type Props = {
-  result: ActionResult<string> | null;
-}
+// TODO: Add prop types and implment authentication
 
-export default function ResultMessage({ result }: Props) {
+export default function ResultMessage({ result }: { result: { status: string, message?: string, data?: string } }) {
   const router = useRouter()
 
   if (!result) return null

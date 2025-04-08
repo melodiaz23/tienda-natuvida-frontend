@@ -1,12 +1,12 @@
 'use client';
+
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+// import Skeleton from '@/components/common/Skeleton';
 
-
-export default function Page() {
+function UserAccount() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-
   const { user, logout } = useAuth();
 
   const handleLogout = async () => {
@@ -53,7 +53,6 @@ export default function Page() {
 
           <div className="border rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Mis pedidos</h2>
-            {/* Aquí puedes mostrar los pedidos del usuario o un mensaje si no tiene */}
             <p>No tienes pedidos recientes.</p>
             <div className="mt-4">
               <Link
@@ -69,3 +68,14 @@ export default function Page() {
     </div>
   );
 }
+
+
+function Page() {
+  return (
+
+    <UserAccount />
+
+  );
+}
+
+export default Page;

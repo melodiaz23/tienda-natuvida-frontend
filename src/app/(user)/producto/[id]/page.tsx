@@ -1,12 +1,24 @@
-import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import { cache } from 'react';
+import 'server-only';
+import { notFound } from 'next/navigation';
 import Skeleton from '@/components/common/Skeleton';
 import { Gallery } from '@/components/product/Gallery';
 import { ProductImage } from '@/types/product.types';
 import { productService } from '@/services/productService';
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
-  const product = await productService.getProductById(params.id);
+const getProduct = cache(async (id: string) => {
+  return productService.getProductById(id);
+});
+
+
+export default async function ProductPage({
+  params
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const product = await getProduct(id);
 
   if (!product) return notFound();
 

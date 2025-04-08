@@ -257,7 +257,9 @@ async function ColagenoHidrolizadoPage() {
           de vida de quienes lo consumen.
         </h4>
         <div className="w-full md:w-1/2 self-center px-2 md:px-0">
-          <TestimonialCarrousel />
+          <Suspense fallback={<Skeleton />}>
+            <TestimonialCarrousel />
+          </Suspense>
         </div>
       </section>
       <section className="py-16 lg:py-24">

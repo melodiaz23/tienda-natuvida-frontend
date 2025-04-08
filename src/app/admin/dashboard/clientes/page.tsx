@@ -1,9 +1,12 @@
 import ProductCard from "@/components/admin/products/ProductCard";
 import { productService } from "@/services/productService";
+import { notFound } from "next/navigation";
 
 export default async function AdminClientPage() {
   const response = await productService.getAllProducts();
   const products = response.data;
+
+  if (!products) return notFound();
 
   return (
     <div className="p-4">

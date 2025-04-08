@@ -3,7 +3,6 @@
 import LoadingDots from "@/components/common/LoadingDots";
 import { useAuth } from "@/context/AuthContext";
 import { profileSchema, ProfileSchema } from "@/lib/schemas/registerSchema"
-import userService from "@/services/userService";
 import { ApiErrorData, ApiResponse } from "@/types/api.types";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AxiosError } from "axios";
@@ -13,7 +12,7 @@ import { FieldErrors, useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
 export default function EditInfoProfileForm() {
-  const { user, updateUserData } = useAuth();
+  const { user, updateProfile } = useAuth();
   const router = useRouter();
 
   const {
@@ -43,10 +42,8 @@ export default function EditInfoProfileForm() {
 
   const onSubmit = async (data: ProfileSchema) => {
     try {
-      const result = await userService.updateProfile(data);
-
+      const result = await updateProfile(data);
       if (result.success) {
-        await updateUserData();
         toast.success('Tu perfil se actualizó correctamente');
         router.push('/mi-cuenta');
       } else {

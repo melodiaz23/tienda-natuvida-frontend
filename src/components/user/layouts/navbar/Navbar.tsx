@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-// import NavIcons from './NavIcons';
-import { Suspense } from 'react';
-import Search, { SearchSkeleton } from './Search';
+import HorizontalSlide from '@/components/common/HorizontalSlide';
 import MobileMenu from './MobileMenu';
 import NavIcons from './NavIcons';
 
@@ -10,7 +8,7 @@ export default async function Navbar() {
   // const session = await auth(); // TODO: Add auth
 
   return (
-    <div>
+    <>
       <div className="h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative">
         {/* MOBILE */}
         <div className="h-full flex items-center justify-between md:hidden">
@@ -40,22 +38,22 @@ export default async function Navbar() {
                 priority
               />
             </Link>
-            <div className="hidden xl:flex items-center gap-4">
-              <Link href="/">Inicio</Link>
-              <Link href="/tienda">Tienda</Link>
-              <Link href="/">Ofertas</Link>
-              <Link href="/">Contacto</Link>
+            <div className="hidden xl:flex items-center gap-8 flex-grow">
+              <Link href="/" className="text-nv-green-light font-medium hover:text-green-light">Inicio</Link>
+              <Link href="/tienda" className="text-nv-green-light font-medium hover:text-green-light">Tienda</Link>
+              <Link href="/" className="text-nv-green-light font-medium hover:text-green-light">Ofertas</Link>
+              <Link href="/" className="text-nv-green-light font-medium hover:text-green-light">Contacto</Link>
             </div>
           </div>
-          <div className="w-2/3 xl:w-1/2 flex items-center justify-between gap-8">
-            <Suspense fallback={<SearchSkeleton />}>
-              <Search />
-            </Suspense>
+          <div className="w-2/3 xl:w-1/2 flex items-center gap-8 justify-end">
             <NavIcons />
           </div>
         </div>
       </div>
-    </div>
+      <div className='bg-red-600 text-white text-center font-semibold'>
+        <HorizontalSlide />
+      </div>
+    </>
   );
 }
 

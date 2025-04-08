@@ -1,17 +1,22 @@
 'use client';
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Fragment, Suspense, useEffect, useState } from 'react';
 
 import { Bars3Icon } from '@heroicons/react/24/outline';
-import { Menu } from '@/types/shop.types';
+
 import Search, { SearchSkeleton } from './Search';
 
 
+type Menu = {
+  title: string;
+  path: string;
+};
+
 export default function MobileMenu({ menu }: { menu: Menu[] }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams(); // TODO: Add search params to the menu, removed for build preview
   const [isOpen, setIsOpen] = useState(false);
   const openMobileMenu = () => setIsOpen(true);
   const closeMobileMenu = () => setIsOpen(false);
@@ -41,7 +46,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
 
   useEffect(() => {
     setIsOpen(false);
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   return (
     <>

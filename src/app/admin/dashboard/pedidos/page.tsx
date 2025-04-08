@@ -1,9 +1,8 @@
-import ProductCard from "@/components/admin/products/ProductCard";
-import { productService } from "@/services/productService";
+
 
 export default async function AdminOrdersPage() {
-  const response = await productService.getAllProducts();
-  const products = response.data;
+
+  // TODO: Implement the orders management page
 
   return (
     <div className="p-4">
@@ -11,9 +10,7 @@ export default async function AdminOrdersPage() {
         <h1 className="text-2xl text-bold">Página de Gestión de Pedidos</h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {products.map((product) => (
-          <ProductCard key={product.id} {...product} />
-        ))}
+
       </div>
     </div>
   );
