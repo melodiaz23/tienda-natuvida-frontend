@@ -3,7 +3,7 @@ export interface User {
   email: string;
   name: string;
   lastName: string;
-  phone: string;
+  phone?: string;
   createdAt: string; // LocalDateTime en formato string
   updatedAt: string;
   role: Role;
