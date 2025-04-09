@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react';
-import ComingSoon from '@/components/user/ComingSoon';
+import React from 'react';
+import Slider from '@/components/user/Slider';
 
 export const metadata = {
   description: 'Tienda natuvida, tienda de salud y bienestar',
@@ -10,10 +10,14 @@ export const metadata = {
 
 export default function Homepage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="">
-        <ComingSoon />
-      </div>
-    </Suspense>
+    <>
+      <section>
+        <Slider />
+      </section>
+      <section>
+
+      </section>
+    </>
+
   );
 }
