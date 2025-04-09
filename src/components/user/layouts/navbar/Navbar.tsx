@@ -50,7 +50,7 @@ export default async function Navbar() {
           </div>
         </div>
       </div>
-      <div className='bg-red-600 text-white text-center font-semibold'>
+      <div className="bg-nv-red-promotional text-white text-center font-semibold p-1">
         <HorizontalSlide />
       </div>
     </>
