@@ -1,5 +1,6 @@
 import React from 'react';
 import Slider from '@/components/user/Slider';
+import BestSellers from '@/components/product/BestSellers';
 
 export const metadata = {
   description: 'Tienda natuvida, tienda de salud y bienestar',
@@ -15,7 +16,7 @@ export default function Homepage() {
         <Slider />
       </section>
       <section>
-
+        <BestSellers />
       </section>
     </>
 
