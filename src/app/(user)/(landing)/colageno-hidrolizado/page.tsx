@@ -1,3 +1,4 @@
+export { metadata } from './metadata';
 import Image from 'next/image';
 import Link from 'next/link';
 import colagenoFront from '../../../../../public/colageno-front_o.webp';
@@ -8,15 +9,12 @@ import star from '../../../../../public/icons/star.svg';
 import whatsapp from '../../../../../public/icons/logo-whatsapp.svg';
 import checkmark from '../../../../../public/icons/checkmark-circle-outline.svg';
 import heart from '../../../../../public/icons/heart-outline.svg';
-import FAQ from '@/components/landing/FAQ';
 import FooterLanding from '@/components/landing/FooterLanding';
 import { Suspense } from 'react';
 import Skeleton from '@/components/common/Skeleton';
 import Perks from '@/components/landing/Perks';
 import Difference from '@/components/landing/Difference';
-import TestimonialCarrousel from '@/components/landing/TestimonialCarrousel';
-import CountdownTimer from '@/components/landing/CountdownTimer';
-import HorizontalSlide from '@/components/common/HorizontalSlide';
+import dynamic from 'next/dynamic';
 
 
 export default function Page() {
@@ -29,14 +27,22 @@ export default function Page() {
   );
 }
 
+const TestimonialCarrousel = dynamic(() => import('@/components/landing/TestimonialCarrousel'), {
+  loading: () => <div className="w-full h-60 bg-green-dark/20 animate-pulse rounded-xl"></div>,
+});
+
+const FAQ = dynamic(() => import('@/components/landing/FAQ'), {
+  loading: () => <div className="w-full h-60 bg-gray-100 animate-pulse rounded-lg"></div>
+});
+
+const CountdownTimer = dynamic(() => import('@/components/landing/CountdownTimer'), {
+  loading: () => <div className="py-8 flex justify-center"><div className="animate-pulse h-16 w-64 bg-gray-200 rounded"></div></div>,
+});
+
 async function ColagenoHidrolizadoPage() {
 
   return (
     <>
-      {/* <ProductProvider> */}
-      <div className="bg-green-500/70 py-1 w-full text-center font-extrabold italic font-inter">
-        <HorizontalSlide />
-      </div>
       <section className="flex flex-col md:flex-row pb-8 py-2 md:max-w-screen-xl mx-auto items-center">
         <div className="w-full flex flex-col md:flex-row justify-center items-center justify-items-center">
           <div className="w-auto md:w-2/5 xl:w-1/2 flex-shrink align-middle justify-center items-center">
@@ -44,10 +50,11 @@ async function ColagenoHidrolizadoPage() {
               src={colagenoFront}
               alt="colageno hidrolizado y citrato de magnesio"
               priority
-              content="width=device-width"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"  // Define tamaños según viewport
               className="h-auto w-96 lg:w-full"
               width={350}
               height={350}
+              quality={85}
             />
           </div>
           <div className="md:w-1/2 flex md:grow flex-col justify-center px-8 md:px-0 md:py-8 lg:py-0">
@@ -276,8 +283,8 @@ async function ColagenoHidrolizadoPage() {
           <Image
             src={preparation}
             alt="preparación colageno"
-            priority
             unoptimized
+            quality={85}
             className="h-auto m-auto hidden md:block w-1/2 xl:w-1/2 md:w-1/3"
           />
           <div className="flex flex-col text-whiteygreen justify-center">
@@ -320,12 +327,13 @@ async function ColagenoHidrolizadoPage() {
               </div>
             </div>
             <Image
-              src={colagenoFront}
-              alt="colageno hidrolizado y citrato de magnesio"
-              width={150}
+              src="https://res.cloudinary.com/djsmvhemj/image/upload/f_auto,q_auto/v1744044771/Colageno_Magnesio-Natuvida_ckaics.png"
+              alt="colageno hidrolizado y citrato de magnesio - 1 unidad"
+              width={200}
               height={150}
-              placeholder="blur"
-              className="h-auto m-auto"
+              sizes="(max-width: 768px) 350px, 350px"
+              loading="lazy"
+              className="h-auto w-auto max-w-full"
             />
             <div className="font-bold text-sm">+ ENVÍO GRATIS</div>
             <div>Total</div>
@@ -333,7 +341,7 @@ async function ColagenoHidrolizadoPage() {
             <div className='p-4'>
               <Link
                 href={'https://api.whatsapp.com/send?phone=573208680091&text=Hola%2C%20quiero%20hacer%20un%20pedido'}
-                className="inline-block w-1/2 bg-gray-950 text-white font-bold text-l p-2 m-4 rounded text-center">
+                className="inline-block bg-gray-950 text-white font-bold text-l p-2 m-4 rounded text-center">
                 COMPRAR
               </Link>
               {/* <AddToCart product={product[0]} prodQuantity={1} text="COMPRAR" /> */}
@@ -345,31 +353,22 @@ async function ColagenoHidrolizadoPage() {
                 Pide 2 unidades<div className="font-bold">Ahorra $38.500</div>
               </div>
             </div>
-            <div className="relative pt-5 pb-14 flex justify-end 2xl:translate-x-[-7%] lg:translate-x-[8%]">
-              <Image
-                src={colagenoFront}
-                alt="colageno hidrolizado y citrato de magnesio"
-                width={100}
-                height={100}
-                placeholder="blur"
-                className="-translate-x-4 xl:-translate-x-8"
-              />
-              <Image
-                src={colagenoFront}
-                alt="colageno hidrolizado y citrato de magnesio"
-                width={100}
-                height={100}
-                placeholder="blur"
-                className="-translate-x-20 translate-y-[30%] xl:-translate-x-20"
-              />
-            </div>
+            <Image
+              src="https://res.cloudinary.com/djsmvhemj/image/upload/f_auto,q_auto/v1744044772/Colageno_Magnesio-Natuvida_3_c1fiqt.png"
+              alt="colageno hidrolizado y citrato de magnesio - oferta dos unidades"
+              width={200}
+              height={150}
+              sizes="(max-width: 768px) 350px, 350px"
+              loading="lazy"
+              className="h-auto w-auto max-w-full"
+            />
             <div className="font-bold text-sm">+ ENVÍO GRATIS</div>
             <div>Total</div>
             <div className="text-2xl font-bold">$ 115.500</div>
             <div className='p-4'>
               <Link
                 href={'https://api.whatsapp.com/send?phone=573208680091&text=Hola%2C%20quiero%20hacer%20un%20pedido'}
-                className="inline-block w-1/2 bg-gray-950 text-white font-bold text-l p-2 m-4 rounded text-center">
+                className="inline-block bg-gray-950 text-white font-bold text-l p-2 m-4 rounded text-center">
                 COMPRAR
               </Link>
               {/* <AddToCart product={product[0]} prodQuantity={2} text="COMPRAR" /> */}
@@ -379,41 +378,23 @@ async function ColagenoHidrolizadoPage() {
             <div className="p-4">
               ¡Paga 2<div className="font-bold">LLEVA 3!</div>
             </div>
-            <div className="grid grid-cols-[1fr_auto_1fr] grid-rows-[1fr_auto] justify-center items-center relative pt-4 pb-16">
-              <Image
-                src={colagenoFront}
-                alt="colageno hidrolizado y citrato de magnesio"
-                width={100}
-                height={100}
-                placeholder="blur"
-                className="h-auto m-auto row-span-2"
-              />
-              <Image
-                src={colagenoFront}
-                alt="colageno hidrolizado y citrato de magnesio"
-                width={100}
-                height={100}
-                placeholder="blur"
-                className="h-auto absolute top-12 translate-y-[10%] 2xl:translate-x-[85%] xl:translate-x-[55%] lg:translate-x-[40%] translate-x-[35%]"
-              />
-              <div className="self-center auto-cols-auto">+</div>
-              <Image
-                src={colagenoFront}
-                alt="colageno hidrolizado y citrato de magnesio"
-                width={100}
-                height={100}
-                placeholder="blur"
-                className=" h-auto m-auto translate-y-[10%]"
-              />
-            </div>
+            <Image
+              src="https://res.cloudinary.com/djsmvhemj/image/upload/f_auto,q_auto/v1744044772/Colageno_Magnesio-Natuvida_4_a2rrum.png"
+              alt="colageno hidrolizado y citrato de magnesio - oferta lleva 3"
+              width={350}
+              height={350}
+              sizes="(max-width: 768px) 350px, 350px"
+              loading="lazy"
+              className="h-auto w-auto max-w-full"
 
+            />
             <div className="text-sm font-bold">+ ENVÍO GRATIS</div>
             <div>Total</div>
             <div className="text-2xl font-bold">$ 154.000</div>
             <div className='p-4'>
               <Link
                 href={'https://api.whatsapp.com/send?phone=573208680091&text=Hola%2C%20quiero%20hacer%20un%20pedido'}
-                className="inline-block w-1/2 bg-gray-950 text-white font-bold text-l p-2 m-4 rounded text-center">
+                className="inline-block bg-gray-950 text-white font-bold text-l p-2 m-4 rounded text-center">
                 COMPRAR
               </Link>
               {/* <AddToCart product={product[0]} prodQuantity={3} text="COMPRAR" /> */}
@@ -446,7 +427,7 @@ async function ColagenoHidrolizadoPage() {
       <section>
         <FooterLanding />
       </section>
-      {/* </ProductProvider> */}
+
     </>
   );
 }
