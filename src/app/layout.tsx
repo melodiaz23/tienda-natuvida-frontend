@@ -5,26 +5,59 @@ import Providers from './providers/Providers';
 import './globals.css';
 
 
-
-
 const { SITE_NAME } = process.env;
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   : 'http://localhost:3000';
 
 
-const inter = Inter({ subsets: ['latin'], display: 'swap' });
-const openSans = Open_Sans({ subsets: ['latin'], display: 'swap' });
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  weight: ['400', '500', '600', '700']
+});
+
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  weight: ['400', '500', '600', '700']
+});
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     default: SITE_NAME!,
-    description: 'Tienda Natuvida',
+    description: 'Tienda de productos naturales y suplementos alimenticios',
     template: `%s | ${SITE_NAME}`,
     icons: {
       icon: '/icon.svg'
     }
+  },
+  alternates: {
+    canonical: '/',
+    languages: {
+      'es-CO': '/',
+    },
+  },
+  other: {
+    'link': [
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossOrigin: 'anonymous',
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://res.cloudinary.com',
+        crossOrigin: 'anonymous',
+      },
+    ],
   },
   robots: {
     follow: true,
