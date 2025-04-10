@@ -1,4 +1,4 @@
-
+export { generateMetadata } from './metadata';
 import ProductCard from "@/components/product/ProductCard";
 import { productService } from "@/services/productService";
 
