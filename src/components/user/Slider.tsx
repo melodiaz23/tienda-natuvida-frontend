@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import Image from 'next/image';
 
@@ -43,7 +42,7 @@ export default function Slider() {
 
   return (
     <>
-      <div className="h-[50vh] overflow-hidden">
+      <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
         <div
           className="w-max h-full flex transition-all ease-in-out duration-1000"
           style={{ transform: `translateX(-${current * 100}vw)` }}>
@@ -54,25 +53,26 @@ export default function Slider() {
               <div className="w-full h-11/12 relative">
                 <Image
                   src={slide.img}
-                  alt="slide"
+                  alt={slide.title}
                   fill
                   priority
-                  sizes="50vw"
+                  quality={100}
+                  sizes="100vw"
                   className="object-cover object-center"
                 />
               </div>
             </div>
           ))}
         </div>
-        <div className="relative flex m-auto left-1/2 bottom-8 gap-4">
+        <div className="relative flex m-auto left-1/2 bottom-20 gap-4">
           {slides.map((slide, index) => (
             <div
               key={slide.id}
-              className={`w-3 h-3 rounded-full ring-1 ring-gray-600 cursor-pointer flex items-center justify-center ${current === index ? 'scale-150' : ''
+              className={`w-3 h-3 rounded-full ring-1 ring-nv-green-soft cursor-pointer flex items-center justify-center ${current === index ? 'scale-150' : ''
                 }`}
               onClick={() => setCurrent(index)}>
               {current === index && (
-                <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
+                <div className="w-1.5 h-1.5 rounded-full bg-nv-green-soft" />
               )}
             </div>
           ))}
