@@ -30,7 +30,7 @@ const PRODUCTS: Product[] = [
     id: '3',
     name: 'Liofhim, Concentrado de Ingredientes Naturales para Dormir Tranquilamente',
     price: 69900,
-    imageUrl: '/placeholder.png',
+    imageUrl: 'https://res.cloudinary.com/djsmvhemj/image/upload/v1744308544/liofhim-natuvida_tmc7cx.png',
     slug: 'liofhim'
   }
 ];
