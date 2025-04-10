@@ -2,7 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // Optimizaciones de compilación
-  swcMinify: true, // Asegura que SWC minifique el código
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production', // Elimina console.log en producción
   },
