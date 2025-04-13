@@ -1,33 +1,41 @@
 'use client'
 
-import { useState, useRef, useEffect, useContext } from 'react';
+import { useRef, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { RiShoppingCart2Line } from 'react-icons/ri';
 import Link from 'next/link';
-import { CartContext } from '@/context/CartContext';
+import { useCart } from '@/hooks/useCart';
+import Price from '../utils/Price';
+import { DeleteItemButton } from './DeletItemButton';
+import Image from 'next/image';
+import EditQuantityButton from './EditQuantityButton';
 
 export default function CartModal() {
-  const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const openCart = () => setIsOpen(true);
-  const closeCart = () => setIsOpen(false);
-
-  const { items, getTotalItems } = useContext(CartContext);
+  const { items, getTotalItems, getTotalPrice, isCartModalOpen, setIsCartModalOpen } = useCart();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node) && isOpen) {
-        setIsOpen(false);
+      if (modalRef.current && !modalRef.current.contains(event.target as Node) && isCartModalOpen) {
+        setIsCartModalOpen(false);
       }
     };
-    if (isOpen) {
+    if (isCartModalOpen) {
       document.addEventListener('click', handleClickOutside);
       return () => {
         document.removeEventListener('click', handleClickOutside);
       };
     }
-  }, [isOpen]);
+  }, [isCartModalOpen, setIsCartModalOpen]);
+
+  const openCart = () => {
+    setIsCartModalOpen(true);
+  };
+
+  const closeCart = () => {
+    setIsCartModalOpen(false);
+  };
 
   return (
     <div ref={modalRef} className="relative">
@@ -44,7 +52,7 @@ export default function CartModal() {
         )}
       </button>
 
-      {isOpen && (
+      {isCartModalOpen && (
         <div className="fixed top-0 right-0 bottom-0 z-50 w-full md:w-96 bg-white shadow-lg border-l border-gray-200">
           <div className="flex items-center justify-between p-4 border-b">
             <h2 className="text-lg font-medium">Carrito de Compras</h2>
@@ -62,15 +70,37 @@ export default function CartModal() {
             ) : (
               <ul className="divide-y divide-gray-200">
                 {items.map((item) => (
-                  <li key={item.id} className="py-4 flex">
-                    <div className="w-16 h-16 bg-gray-200 rounded-md flex-shrink-0"></div>
-                    <div className="ml-4 flex-1">
-                      <h3 className="text-sm font-medium">{item.product.name}</h3>
+                  <li key={item.id} className="py-4 flex gap-3">
+                    <div className="w-16 h-16 bg-gray-200 rounded-md flex-shrink-0">
+                      <div className="absolute z-40 -ml-1 -mt-1">
+                        <DeleteItemButton item={item} />
+                      </div>
+                      <div className="flex-shrink-0 h-20 w-20 overflow-hidden rounded-md border border-neutral-200 bg-neutral-200/40">
+                        <Image
+                          src={item.productImageUrl || "/placeholder.png"}
+                          alt={item.productName}
+                          className="h-full w-auto object-cover"
+                          width={64}
+                          height={64}
+                        />
+                      </div>
+                    </div>
+                    <div className="ml-4 flex-1 gap-1">
+                      <h3 className="text-sm font-medium">{item.productName}</h3>
+                      <div className="flex items-center mt-1 justify-between">
+                        <EditQuantityButton
+                          itemId={item.id}
+                          initialQuantity={item.quantity}
+                        />
+                        <p className="text-sm font-medium">
+                          <Price value={parseFloat((item.unitPrice * item.quantity).toFixed(2))} />
+                        </p>
+                      </div>
                       <p className="text-sm text-gray-500">
                         Cantidad: {item.quantity}
                       </p>
                       <p className="text-sm font-medium mt-1">
-                        ${(item.product.price.unit * item.quantity).toFixed(2)}
+                        <Price value={parseFloat((item.unitPrice * item.quantity).toFixed(2))} />
                       </p>
                     </div>
                   </li>
@@ -82,7 +112,7 @@ export default function CartModal() {
           <div className="border-t p-4">
             <div className="flex justify-between mb-2">
               <p>Total:</p>
-              {/* <p className="font-medium">${getTotalPrice().toFixed(2)}</p> */}
+              <p className="font-medium"><Price value={getTotalPrice()} /></p>
             </div>
             <Link
               href="/checkout"
