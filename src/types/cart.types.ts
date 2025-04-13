@@ -1,4 +1,5 @@
-import { Product } from "./product.types";
+import { ApiResponse } from "./api.types";
+import { Price } from "./product.types";
 
 export enum CartStatus {
   ACTIVE = 'ACTIVE',
@@ -9,35 +10,30 @@ export enum CartStatus {
 
 export interface CartItem {
   id: string;
-  product: Product;
+  productId: string;
+  productName: string;
+  productImageUrl?: string;
   quantity: number;
   unitPrice: number;
+  price?: Price;
   subtotal: number;
 }
 
-
 export interface Cart {
   id: string;
-  createdAt: string;
-  updatedAt: string;
   userId?: string;
-  sessionId?: string;
   items: CartItem[];
   totalPrice: number;
   status: CartStatus;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-
-export interface CartContextType {
-  items: CartItem[];
-  // cart: Cart | null;
-  // isLoading: boolean;
-  // error: string | null;
-  addToCart: (product: Product, quantity?: number) => void;
-  removeFromCart: (itemId: string) => void;
-  updateQuantity: (itemId: string, quantity: number) => void;
-  // updateCartItem: (itemId: string, quantity: number) => Promise<void>;
-  clearCart: () => void;
-  getTotalItems: () => number;
-  getTotalPrice: () => number;
+export interface CartItemRequest {
+  productId: string;
+  quantity: number;
 }
+
+export type CartResponse = ApiResponse<Cart>;
+export type CartItemResponse = ApiResponse<CartItem>;
+
