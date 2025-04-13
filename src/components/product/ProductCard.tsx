@@ -2,11 +2,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Product } from '@/types/product.types';
-import { useCart } from '@/hooks/useCart';
+import AddToCartBtn from '../cart/AddToCartButton';
 
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { addToCart } = useCart();
 
   const primaryImage = product.primaryImageUrl ||
     (product.images.length > 0 ? product.images[0].imageUrl : "/placeholder.png");
@@ -27,12 +26,7 @@ export default function ProductCard({ product }: { product: Product }) {
           <h3 className="font-medium text-lg">{product.name}</h3>
           <p className="text-gray-600 mt-1 text-sm line-clamp-2">{product.description}</p>
           <div className="mt-2 font-bold text-xl">${product.price.unit.toLocaleString()}</div>
-          <button className="mt-4 w-full bg-green-dark text-white py-2 px-4 rounded-md hover:bg-green-dark/90" onClick={(e) => {
-            e.preventDefault();
-            addToCart(product);
-          }}>
-            Añadir al carrito
-          </button>
+          <AddToCartBtn product={product} prodQuantity={1} />
         </div>
       </Link>
     </div>
