@@ -125,7 +125,7 @@ export default function CartProvider({ children }: { children: React.ReactNode }
           productName: product.name,
           quantity: quantity,
           unitPrice: unitPrice,
-          price: {
+          productPrice: {
             unit: product.price.unit,
             twoUnits: product.price.twoUnits,
             threeUnits: product.price.threeUnits,
@@ -148,7 +148,7 @@ export default function CartProvider({ children }: { children: React.ReactNode }
   // Actualizar la cantidad de un item
   const updateQuantity = (itemId: string, quantity: number) => {
     const item = items.find((item) => item.id === itemId);
-    if (!item || !item.price) {
+    if (!item || !item.productPrice) {
       console.error('Item price is undefined');
       return;
     }
@@ -157,7 +157,7 @@ export default function CartProvider({ children }: { children: React.ReactNode }
       return;
     }
 
-    const { subtotal, unitPrice } = calculateCartItemPrices(item.price, quantity);
+    const { subtotal, unitPrice } = calculateCartItemPrices(item.productPrice, quantity);
 
     setItems((prevItems) =>
       prevItems.map((item) =>
