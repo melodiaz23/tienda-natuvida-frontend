@@ -7,15 +7,13 @@ import { Gallery } from '@/components/product/Gallery';
 import { ProductImage } from '@/types/product.types';
 import { productService } from '@/services/productService';
 
+
 // TODO: Add metadata for product page
 
 
 const getProduct = cache(async (id: string) => {
   return productService.getProductById(id);
 });
-
-
-
 
 
 export default async function ProductPage({
@@ -25,6 +23,7 @@ export default async function ProductPage({
 }) {
   const { id } = await params;
   const product = await getProduct(id);
+
 
   if (!product) return notFound();
 
