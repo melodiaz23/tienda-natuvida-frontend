@@ -1,12 +1,11 @@
 'use client';
-import { ProductImage, ProductRequest } from '@/types/product.types';
+import { Category, ProductImage, ProductRequest } from '@/types/product.types';
 import { useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 import ProductImagesManager from './ProductImagesManager';
 import { productService } from '@/services/productService';
 import { useRouter } from 'next/navigation';
 import { categoryService } from '@/services/categoryService';
-import { Category } from '@/types/category.types';
 import { ProductSchema } from '@/lib/schemas/productSchema';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +14,7 @@ import TagManager from './TagManager';
 import PriceManager from './PriceManager';
 import IngredientManager from './IngredientManager';
 import BenefitManager from './BenefitManager';
+
 
 interface ProductFormProps {
   mode: 'create' | 'edit';
@@ -34,9 +34,7 @@ export const initialProductState = {
     id: undefined,
     unit: 0,
     twoUnits: 0,
-    threeUnits: 0,
-    threeByTwo: 0,
-    fiveByThree: 0
+    threeUnits: 0
   },
   categories: [],
   images: [],
@@ -45,9 +43,7 @@ export const initialProductState = {
 
 export default function ProductForm({ mode, initialData }: ProductFormProps) {
   const [categoryOptions, setCategoryOptions] = useState<Category[]>([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(
-    initialData?.categories?.[0] || ''
-  );
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string[]>([]);
 
   const router = useRouter();
 
@@ -90,8 +86,7 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
   // Manejar categorías
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const categoryId = e.target.value;
-    setSelectedCategoryId(categoryId);
-
+    setSelectedCategoryId([categoryId]);
     if (categoryId) {
       setValue('categories', [categoryId], { shouldValidate: true });
     } else {

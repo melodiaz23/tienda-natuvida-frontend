@@ -16,10 +16,7 @@ export default async function EditProductPage({ params }: PageProps) {
     }
 
     const productRequest: ProductRequest = {
-      ...product,
-      categories: Array.isArray(product.categories)
-        ? product.categories.map(cat => typeof cat === 'object' ? cat.id : cat)
-        : [],
+      ...product
     };
 
     return (
