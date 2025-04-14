@@ -1,7 +1,8 @@
+import { Category, CategoryRequest } from "@/types/product.types";
 import api from "../utils/api";
 import ApiPaths from "../utils/apiPaths";
 import { ApiResponse } from "@/types/api.types";
-import { Category, CategoryRequest } from "@/types/category.types";
+
 
 export const categoryService = {
   getAllCategories: async (): Promise<ApiResponse<Category[]>> => {

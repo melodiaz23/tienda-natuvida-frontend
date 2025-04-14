@@ -4,10 +4,8 @@ import { z } from 'zod';
 const PriceSchema = z.object({
   id: z.string().optional(),
   unit: z.number().positive('El precio unitario debe ser mayor a 0'),
-  twoUnits: z.number().positive('El precio de dos unidades debe ser mayor a 0'),
-  threeUnits: z.number().positive('El precio de tres unidades debe ser mayor a 0'),
-  threeByTwo: z.number().positive('El precio de tres por dos debe ser mayor a 0'),
-  fiveByThree: z.number().positive('El precio de cinco por tres debe ser mayor a 0')
+  twoUnits: z.number().positive('El precio de dos unidades debe ser mayor a 0').optional(),
+  threeUnits: z.number().positive('El precio de tres unidades debe ser mayor a 0').optional()
 });
 
 // Esquema de imagen de producto

@@ -3,13 +3,9 @@
 import { useState } from "react";
 import { categoryService } from "@/services/categoryService";
 import { useRouter } from "next/navigation";
-import { Category } from "@/types/category.types";
+import { Category } from "@/types/product.types";
 
-interface CategoryCardProps {
-  category: Category;
-}
-
-export default function CategoryCard({ category }: CategoryCardProps) {
+export default function CategoryCard({ category }: { category: Category }) {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(category.name);
   const [description, setDescription] = useState(category.description);

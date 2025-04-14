@@ -1,9 +1,9 @@
 'use client';
 import { useState } from "react";
-import { CategoryRequest } from "@/types/category.types";
 import { categoryService } from "@/services/categoryService";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { CategoryRequest } from "@/types/product.types";
 
 interface CreateUpdateCategoriesFormProps {
   initialData?: CategoryRequest;
