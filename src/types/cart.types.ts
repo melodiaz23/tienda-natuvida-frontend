@@ -15,7 +15,7 @@ export interface CartItem {
   productImageUrl?: string;
   quantity: number;
   unitPrice: number;
-  price?: Price;
+  productPrice?: Price;
   subtotal: number;
 }
 
