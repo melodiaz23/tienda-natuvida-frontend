@@ -73,7 +73,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  // Register function - adapted to your authService
   const register = async (userData: RegisterRequest) => {
     setLoading(true);
     setError(null);

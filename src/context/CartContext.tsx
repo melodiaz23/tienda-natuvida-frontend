@@ -2,10 +2,15 @@
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { CartItem } from '@/types/cart.types';
 import { Product } from '@/types/product.types';
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState, useMemo } from 'react';
 import { useAuth } from './AuthContext';
 import { cartService } from '@/services/cartService';
-import { calculateCartItemPrices } from '@/components/utils/PriceCalculator';
+import { calculateCartItemPrices } from '@/components/utils/PriceCalculator'; // Asegúrate que la ruta es correcta
+
+// Define la interfaz para las props del proveedor si es necesario
+interface CartProviderProps {
+  children: React.ReactNode;
+}
 
 export interface CartContextType {
   items: CartItem[];
@@ -16,178 +21,219 @@ export interface CartContextType {
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
-  syncCartWithServer: () => Promise<void>;
+  syncCartWithServer: () => Promise<boolean>;
   isCartModalOpen: boolean;
   setIsCartModalOpen: (isOpen: boolean) => void;
+  loadCartOnLogin: () => Promise<void>;
 }
 
 const initialCartContext: CartContextType = {
   items: [],
   isLoading: false,
-  addToCart: () => { },
-  removeFromCart: () => { },
-  updateQuantity: () => { },
-  clearCart: () => { },
+  addToCart: () => console.warn('CartContext not initialized'),
+  removeFromCart: () => console.warn('CartContext not initialized'),
+  updateQuantity: () => console.warn('CartContext not initialized'),
+  clearCart: () => console.warn('CartContext not initialized'),
   getTotalItems: () => 0,
   getTotalPrice: () => 0,
-  syncCartWithServer: async () => { },
+  syncCartWithServer: async () => { console.warn('CartContext not initialized'); return false; },
   isCartModalOpen: false,
-  setIsCartModalOpen: () => { }
-
+  setIsCartModalOpen: () => console.warn('CartContext not initialized'),
+  loadCartOnLogin: async () => console.warn('CartContext not initialized'),
 };
 
 export const CartContext = createContext<CartContextType>(initialCartContext);
 
-export default function CartProvider({ children }: { children: React.ReactNode }) {
+export default function CartProvider({ children }: CartProviderProps) {
   const [items, setItems] = useLocalStorage<CartItem[]>('cart', []);
   const [isLoading, setIsLoading] = useState(false);
-  const [serverCartId, setServerCartId] = useState<string | null>(null);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const { isAuthenticated } = useAuth();
 
-
-  // Sincronizar carrito con el servidor
-  const syncCartWithServer = useCallback(async () => {
-    if (!isAuthenticated || items.length === 0) return;
+  const syncCartWithServer = useCallback(async (): Promise<boolean> => {
+    if (!isAuthenticated || items.length === 0) {
+      console.log('Sincronización omitida: Usuario no autenticado o carrito local vacío.');
+      return true; // Se considera éxito si no hay nada que sincronizar o no aplica
+    }
+    console.log('Iniciando sincronización con el servidor...');
     setIsLoading(true);
     try {
-      // Convertir los items a CartItemRequest
       const itemRequests = items.map(item => ({
         productId: item.productId,
-        quantity: item.quantity
+        quantity: item.quantity,
       }));
-      const response = await cartService.syncCartFromLocalStorage(itemRequests);
-      if (response.success && response.data) {
-        setItems(response.data.items);
 
-        if (JSON.stringify(items) !== JSON.stringify(response.data.items)) {
-          console.log('Carrito sincronizado con el servidor:', response.data);
-        }
+      const response = await cartService.syncCartFromLocalStorage(itemRequests);
+
+      if (response.success && response.data) {
+        console.log('Carrito sincronizado con éxito. Respuesta:', response.data);
+        // Actualiza el estado local y el localStorage con la respuesta del servidor
+        setItems(response.data.items);
+        return true;
+      } else {
+        console.error('Error en la respuesta del servidor al sincronizar:', response.message);
+        // TODO: Implementar TOAST para enviar mensaje
+        return false;
       }
     } catch (error) {
-      console.error('Error al sincronizar carrito con el servidor:', error);
+      console.error('Error de red o excepción al sincronizar carrito:', error);
+      return false;
     } finally {
       setIsLoading(false);
+      console.log('Sincronización finalizada.');
     }
   }, [isAuthenticated, items, setItems]);
 
-  // Cargar carrito del servidor
-  const loadServerCart = useCallback(async () => {
+  const loadCartOnLogin = useCallback(async () => {
     if (!isAuthenticated) return;
+
+    console.log('Cargando carrito del servidor...');
     setIsLoading(true);
     try {
       const response = await cartService.getCurrentCart();
       if (response.success && response.data) {
-        setServerCartId(response.data.id);
-        if (response.data.items.length > 0) {
-          // Si el servidor tiene items, los usamos como base
-          if (items.length > 0) {
-            // Si también hay items locales, sincronizamos inmediatamente
-            await syncCartWithServer();
-          } else {
-            // Si no hay items locales, simplemente usamos los del servidor
-            setItems(response.data.items);
-          }
+        console.log('Carrito del servidor obtenido:', response.data);
+        const serverItems = response.data.items || [];
+        if (serverItems.length > 0) {
+          console.log('Usando carrito del servidor.');
+          setItems(serverItems);
         } else if (items.length > 0) {
-          // Si el servidor no tiene items pero el local sí, sincronizamos
+          console.log('Carrito del servidor vacío, sincronizando items locales...');
           await syncCartWithServer();
+        } else {
+          console.log('Carrito del servidor y local vacíos.');
+          setItems([]);
         }
       }
     } catch (error) {
       console.error('Error al cargar carrito del servidor:', error);
+      // Mantener items locales si falla la carga
     } finally {
-      setIsLoading(false);
+      if (isLoading) setIsLoading(false);
+      console.log('Carga/Sincronización inicial finalizada.');
     }
-  }, [isAuthenticated, items.length, setItems, syncCartWithServer]);
+  }, [isAuthenticated, items.length, setItems, syncCartWithServer, isLoading]); // Dependencias
 
-
-  // Cargar carrito del servidor cuando el usuario inicia sesión
   useEffect(() => {
     if (isAuthenticated) {
-      loadServerCart();
+      loadCartOnLogin();
+    } else {
+      setIsCartModalOpen(false);
     }
-  }, [isAuthenticated, loadServerCart]);
+    // No incluir loadCartOnLogin en las dependencias si solo debe correr al cambiar isAuthenticated
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
-
-  const addToCart = (product: Product, quantity: number = 1) => {
+  const addToCart = useCallback((product: Product, quantity: number = 1) => {
     setItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === product.id);
-      if (existingItem) {
-        const { subtotal, unitPrice } = calculateCartItemPrices(product.price, existingItem.quantity + quantity);
-        return prevItems.map((i) =>
-          i.id === product.id ? { ...i, quantity: i.quantity + quantity, unitPrice, subtotal } : i
-        );
+      const existingItemIndex = prevItems.findIndex((i) => i.productId === product.id); // Usa productId para buscar
+      const newItems = [...prevItems];
+
+      if (existingItemIndex > -1) {
+        // Actualiza item existente
+        const existingItem = newItems[existingItemIndex];
+        const newQuantity = existingItem.quantity + quantity;
+        const { subtotal, unitPrice } = calculateCartItemPrices(product.price, newQuantity);
+        newItems[existingItemIndex] = {
+          ...existingItem,
+          quantity: newQuantity,
+          unitPrice,
+          subtotal,
+        };
       } else {
+        // Agrega nuevo item
         const { subtotal, unitPrice } = calculateCartItemPrices(product.price, quantity);
         const newItem: CartItem = {
-          id: product.id,
+          id: product.id, // ¿Debería ser un ID único de línea de carrito o el ID del producto? Revisa tu modelo CartItem
           productId: product.id,
           productName: product.name,
           quantity: quantity,
           unitPrice: unitPrice,
-          productPrice: {
-            unit: product.price.unit,
-            twoUnits: product.price.twoUnits,
-            threeUnits: product.price.threeUnits,
-          },
+          productPrice: product.price, // Guarda la estructura de precios completa
           subtotal: subtotal,
+          // Añade otros detalles del producto si son necesarios (imagen, etc.)
         };
-        return [...prevItems, newItem];
+        newItems.push(newItem);
       }
+      return newItems;
     });
+    // No sincronizar aquí, solo abre el modal
     setTimeout(() => {
       setIsCartModalOpen(true);
     }, 250);
-  };
+  }, [setItems]); // Dependencia: setItems
 
-  // Eliminar un item del carrito
-  const removeFromCart = (itemId: string) => {
+  const removeFromCart = useCallback((itemId: string) => { // Asume que itemId es el ID único del CartItem, o productId si así está modelado
     setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-  };
+    // No sincronizar aquí
+  }, [setItems]); // Dependencia: setItems
 
-  // Actualizar la cantidad de un item
-  const updateQuantity = (itemId: string, quantity: number) => {
-    const item = items.find((item) => item.id === itemId);
-    if (!item || !item.productPrice) {
-      console.error('Item price is undefined');
-      return;
-    }
+  const updateQuantity = useCallback((itemId: string, quantity: number) => { // Asume itemId es el ID único del CartItem
     if (quantity <= 0) {
       removeFromCart(itemId);
       return;
     }
 
-    const { subtotal, unitPrice } = calculateCartItemPrices(item.productPrice, quantity);
-
     setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === itemId ? { ...item, quantity, unitPrice, subtotal } : item
-      )
+      prevItems.map((item) => {
+        if (item.id === itemId) {
+          if (!item.productPrice) {
+            console.error('Item price is undefined for item ID:', itemId);
+            return item; // Devuelve el item sin cambios si falta el precio
+          }
+          const { subtotal, unitPrice } = calculateCartItemPrices(item.productPrice, quantity);
+          return { ...item, quantity, unitPrice, subtotal };
+        }
+        return item;
+      })
     );
-  };
+    // No sincronizar aquí
+  }, [setItems, removeFromCart]); // Dependencias: setItems, removeFromCart
 
-  // Vaciar el carrito
-  const clearCart = () => {
-    setItems([]);
-    // Si el usuario está autenticado, también limpiar en el servidor
-    if (isAuthenticated && serverCartId) {
-      cartService.clearCart().catch(error =>
-        console.error('Error al limpiar carrito en el servidor:', error)
-      );
+  const clearCart = useCallback(async () => {
+    setItems([]); // Limpia estado local inmediato
+    setIsCartModalOpen(false); // Cierra modal si está abierto
+
+    // Intenta limpiar en el servidor SI está autenticado
+    if (isAuthenticated) {
+      console.log('Intentando limpiar carrito en el servidor...');
+      setIsLoading(true); // Muestra feedback de carga
+      try {
+        // Asumiendo que clearCart no necesita ID o lo obtiene del token/sesión
+        await cartService.clearCart();
+        console.log('Carrito limpiado en el servidor.');
+      } catch (error) {
+        console.error('Error al limpiar carrito en el servidor:', error);
+        // Podrías intentar sincronizar un carrito vacío si clear falla,
+        // o mostrar un error al usuario.
+        // await syncCartWithServer(); // Podría ser una opción de fallback
+      } finally {
+        setIsLoading(false);
+      }
     }
-  };
+  }, [isAuthenticated, setItems, setIsLoading]); // Dependencias
 
-  // Obtener el número total de items en el carrito
-  const getTotalItems = () => {
+
+  // --- CÁLCULOS DERIVADOS (MEMORIZADOS) ---
+
+  const getTotalItems = useCallback(() => {
     return items.reduce((total, item) => total + item.quantity, 0);
-  };
+  }, [items]); // Depende solo de 'items'
 
-  // Obtener el precio total del carrito
-  const getTotalPrice = () => {
-    return items.reduce((total, item) => total + item.unitPrice * item.quantity, 0);
-  };
+  const getTotalPrice = useCallback(() => {
+    // Asegúrate que el cálculo aquí sea consistente con `calculateCartItemPrices`
+    // Usar item.subtotal podría ser más directo si siempre está actualizado
+    return items.reduce((total, item) => total + item.subtotal, 0);
+    // Alternativa si subtotal no está disponible o se recalcula:
+    // return items.reduce((total, item) => total + (item.unitPrice * item.quantity), 0);
+  }, [items]); // Depende solo de 'items'
 
-  const value = {
+
+  // --- VALOR DEL CONTEXTO (MEMORIZADO) ---
+
+  // Usamos useMemo para evitar re-crear el objeto 'value' en cada render
+  // si las funciones o valores no han cambiado realmente.
+  const value = useMemo(() => ({
     items,
     isLoading,
     addToCart,
@@ -199,7 +245,11 @@ export default function CartProvider({ children }: { children: React.ReactNode }
     syncCartWithServer,
     isCartModalOpen,
     setIsCartModalOpen,
-  };
+    loadCartOnLogin, // Exponer si es necesario llamarla manualmente en algún otro lugar
+  }), [
+    items, isLoading, addToCart, removeFromCart, updateQuantity, clearCart,
+    getTotalItems, getTotalPrice, syncCartWithServer, isCartModalOpen, setIsCartModalOpen, loadCartOnLogin
+  ]); // Todas las dependencias del objeto value
 
 
   return (
@@ -208,4 +258,3 @@ export default function CartProvider({ children }: { children: React.ReactNode }
     </CartContext.Provider>
   );
 }
-

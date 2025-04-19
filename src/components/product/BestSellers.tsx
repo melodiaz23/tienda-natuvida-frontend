@@ -3,101 +3,21 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import AddToCartBtn from '../cart/AddToCartButton';
-import { Product } from '@/types/product.types';
 import Price from '../utils/Price';
-
-// TEMPORARY DATA
-// This should be replaced with a call to the productService to fetch the best sellers 
-const PRODUCTS: Product[] = [
-  {
-    id: '1',
-    name: 'Colágeno Hidrolizado con Citrato de Magnesio',
-    slug: 'colageno-hidrolizado-citrato-magnesio',
-    description: 'Colágeno Hidrolizado con Citrato de Magnesio',
-    ingredients: [],
-    benefits: [],
-    tags: ['Best Seller'],
-    price: {
-      unit: 77000,
-      twoUnits: 115500,
-      threeUnits: 179900,
-    },
-    images: [
-      {
-        imageUrl: 'https://res.cloudinary.com/djsmvhemj/image/upload/v1744044771/Colageno_Magnesio-Natuvida_ckaics.png',
-        altText: 'Colágeno Hidrolizado con Citrato de Magnesio',
-        isPrimary: true
-      }
-    ],
-    categories: [
-      'Suplementos'
-    ],
-    enabled: true,
-    presentation: '',
-    createdAt: '',
-    updatedAt: ''
-  },
-  {
-    id: '2',
-    name: 'Fibra Natural Sin Azucar Coli Plus - Bebida',
-    slug: 'fibra-natural-sin-azucar-coli-plus',
-    description: 'Fibra Natural Sin Azucar para una digestión saludable',
-    ingredients: [],
-    benefits: [],
-    tags: ['Digestión', 'Natural'],
-    price: {
-      unit: 67900,
-      twoUnits: 101850,
-      threeUnits: 135800,
-    },
-    images: [
-      {
-        imageUrl: 'https://res.cloudinary.com/djsmvhemj/image/upload/v1744044659/Coliplus-NatuVida_fl3yn2.png',
-        altText: 'Fibra Natural Sin Azucar Coli Plus',
-        isPrimary: true
-      }
-    ],
-    categories: [
-      'Suplementos',
-      'Digestión'
-    ],
-    enabled: true,
-    presentation: '',
-    createdAt: '',
-    updatedAt: ''
-  },
-  {
-    id: '3',
-    name: 'Liofhim, Concentrado de Ingredientes Naturales para Dormir Tranquilamente',
-    slug: 'liofhim-concentrado-para-dormir-tranquilamente',
-    description: 'Concentrado de ingredientes naturales que ayudan a conciliar el sueño',
-    ingredients: [],
-    benefits: [],
-    tags: ['Sueño', 'Relajante'],
-    price: {
-      unit: 69900,
-      twoUnits: 104850,
-      threeUnits: 139800,
-    },
-    images: [
-      {
-        imageUrl: 'https://res.cloudinary.com/djsmvhemj/image/upload/v1744308544/liofhim-natuvida_tmc7cx.png',
-        altText: 'Liofhim, Concentrado para dormir tranquilamente',
-        isPrimary: true
-      }
-    ],
-    categories: [
-      'Suplementos',
-      'Bienestar'
-    ],
-    enabled: true,
-    presentation: '',
-    createdAt: '',
-    updatedAt: ''
-  }
-];
+import { useProduct } from '@/hooks/useProduct';
 
 export default function BestSellers() {
+
+  const { featuredProducts } = useProduct();
+
+  if (!featuredProducts || featuredProducts.length === 0) {
+    return <div>No hay productos destacados.</div>;
+  }
+
+  const productsToShow = featuredProducts.slice(0, 3);
+
+
+
 
   return (
     <section className="py-16 px-4 overflow-hidden relative">
@@ -105,7 +25,7 @@ export default function BestSellers() {
         <h2 className="text-4xl font-bold text-center text-nv-green-light mb-12">Los más vendidos</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {PRODUCTS.map((product) => (
+          {productsToShow.map((product) => (
             <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
               <Link href={`/producto/${product.slug}`}>
                 <div className="p-6 flex justify-center">
