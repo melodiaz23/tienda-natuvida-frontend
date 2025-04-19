@@ -11,7 +11,6 @@ import { RestartPasswordSchema, restartPasswordSchema } from "@/lib/schemas/rest
 import { toast } from "react-toastify";
 import LoadingDots from "@/components/common/LoadingDots";
 import SocialLogin from '@/components/auth/SocialLogin';
-// import Skeleton from '@/components/common/Skeleton';
 
 enum MODE {
   LOGIN = "LOGIN",
@@ -68,12 +67,12 @@ const LoginPage: React.FC = () => {
       if (mode === MODE.REGISTER) {
         const response = await registerUser({
           name: (data as RegisterSchema).name,
+          lastName: (data as RegisterSchema).lastName,
           email: (data as RegisterSchema).email,
           password: (data as RegisterSchema).password
         });
         if (response && response.success) {
           setMode(MODE.EMAIL_VERIFICATION);
-          toast.success('¡Registro exitoso! Por favor, revisa tu correo para verificar tu cuenta.');
         }
       }
 
@@ -86,7 +85,6 @@ const LoginPage: React.FC = () => {
         if (response && response.success) {
           const redirectUrl = response.data?.redirectUrl || '/mi-cuenta';
           router.push(redirectUrl);
-          router.refresh();
         }
       }
 
@@ -121,26 +119,48 @@ const LoginPage: React.FC = () => {
         ) : (
           <form onSubmit={handleSubmit(onSubmit)}>
             {mode === MODE.REGISTER && (
-              <div className="mb-4">
-                <label
-                  htmlFor="name"
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                >
-                  Usuario
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  placeholder="Ingresa tu nombre de usuario"
-                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
-                  {...register('name')}
-                />
-                {(errors as FieldErrors<RegisterSchema>).name && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {(errors as FieldErrors<RegisterSchema>).name?.message}
-                  </p>
-                )}
-              </div>
+              <>
+                <div className="mb-4">
+                  <label
+                    htmlFor="name"
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
+                    Nombre
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder="Ingresa tu nombre"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
+                    {...register('name')}
+                  />
+                  {(errors as FieldErrors<RegisterSchema>).name && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {(errors as FieldErrors<RegisterSchema>).name?.message}
+                    </p>
+                  )}
+                </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor="lastName"
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
+                    Apellido
+                  </label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    placeholder="Ingresa tu apellido"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"
+                    {...register('lastName')}
+                  />
+                  {(errors as FieldErrors<RegisterSchema>).lastName && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {(errors as FieldErrors<RegisterSchema>).lastName?.message}
+                    </p>
+                  )}
+                </div>
+              </>
             )}
 
             <div className="mb-4">

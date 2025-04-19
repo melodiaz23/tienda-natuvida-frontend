@@ -7,10 +7,8 @@ import api from '@/utils/api';
 const { LOGIN, REGISTER, AUTH } = ApiPaths;
 
 const authService = {
-  // Registrar un nuevo usuario
   register: async (userData: RegisterRequest): Promise<ApiResponse<User>> => {
     try {
-      console.log('Datos enviados al backend:', userData);
       const response: AxiosResponse<ApiResponse<User>> = await api.post(REGISTER, userData);
       return response.data;
     } catch (error) {
