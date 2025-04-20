@@ -1,7 +1,12 @@
+
+import LogoutButton from "@/components/auth/LogoutButton";
 import Link from "next/link";
 
 
 export default function Sidebar() {
+
+
+
   return (
     <div className="w-64 h-screen bg-white shadow-md flex flex-col fixed left-0 top-2">
       <div className="p-4 h-24">
@@ -38,6 +43,7 @@ export default function Sidebar() {
               <Link href="/" className="block p-2 rounded hover:bg-whiteygreen hover:text-green-dark">
                 Back to Store
               </Link>
+              <LogoutButton className="w-full text-start block p-2 rounded hover:bg-whiteygreen hover:text-green-dark" />
             </li>
           </div>
         </ul>
