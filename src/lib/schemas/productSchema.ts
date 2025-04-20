@@ -18,9 +18,9 @@ const PriceOptional = z
       .optional()
       .or(z.literal(0)),
   })
-  .partial(); // todos opcionales
+  .partial(); // opcionales
 
-// Fusionamos ambas para que dentro de price solo "unit" sea obligatorio.
+
 const PriceSchema = PriceRequired.merge(PriceOptional);
 
 const ProductRequired = z.object({
@@ -55,7 +55,6 @@ const ProductOptional = z
     images: z.array(ProductImageSchema).default([]),
     enabled: z.boolean().default(true),
   })
-  .partial(); // hace opcionales todos estos campos
+  .partial();
 
-// Por último, combinamos ambos en el ProductSchema final.
 export const ProductSchema = ProductRequired.merge(ProductOptional);
