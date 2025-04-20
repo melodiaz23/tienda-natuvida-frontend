@@ -1,11 +1,31 @@
 import { z } from 'zod';
 
-// Esquema de precio
-const PriceSchema = z.object({
-  id: z.string().optional(),
-  unit: z.number().positive('El precio unitario debe ser mayor a 0'),
-  twoUnits: z.number().positive('El precio de dos unidades debe ser mayor a 0').optional(),
-  threeUnits: z.number().positive('El precio de tres unidades debe ser mayor a 0').optional()
+const PriceRequired = z.object({
+  unit: z.number().positive("El precio unitario debe ser mayor a 0"),
+});
+
+const PriceOptional = z
+  .object({
+    id: z.string().optional(),
+    twoUnits: z
+      .number()
+      .positive("El precio de dos unidades debe ser mayor a 0")
+      .optional()
+      .or(z.literal(0)),
+    threeUnits: z
+      .number()
+      .positive("El precio de tres unidades debe ser mayor a 0")
+      .optional()
+      .or(z.literal(0)),
+  })
+  .partial(); // todos opcionales
+
+// Fusionamos ambas para que dentro de price solo "unit" sea obligatorio.
+const PriceSchema = PriceRequired.merge(PriceOptional);
+
+const ProductRequired = z.object({
+  name: z.string().min(3, "El nombre debe tener al menos 3 caracteres"),
+  price: PriceSchema,
 });
 
 // Esquema de imagen de producto
@@ -18,18 +38,24 @@ const ProductImageSchema = z.object({
 });
 
 
-// Esquema para creación/actualización de producto
-export const ProductSchema = z.object({
-  id: z.string().optional(),
-  name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres'),
-  description: z.string().min(10, 'La descripción debe tener al menos 10 caracteres'),
-  presentation: z.string().min(3, 'La presentación debe tener al menos 3 caracteres'),
-  usageMode: z.string().optional(),
-  ingredients: z.array(z.string()).default([]),
-  benefits: z.array(z.string()).default([]),
-  tags: z.array(z.string()).default([]),
-  price: PriceSchema,
-  categories: z.array(z.string()).default([]),
-  images: z.array(ProductImageSchema).optional().default([]),
-  enabled: z.boolean().default(true)
-});
+const ProductOptional = z
+  .object({
+    id: z.string().uuid("El ID debe ser un UUID válido").optional(),
+    customName: z.string().optional(),
+    slug: z.string().optional(),
+    description: z.string().optional(),
+    presentation: z.string().optional(),
+    usageMode: z.string().optional(),
+    ingredients: z.array(z.string()).default([]),
+    benefits: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    bonuses: z.array(z.string()).default([]),
+    contraindications: z.array(z.string()).default([]),
+    categories: z.array(z.string()).default([]),
+    images: z.array(ProductImageSchema).default([]),
+    enabled: z.boolean().default(true),
+  })
+  .partial(); // hace opcionales todos estos campos
+
+// Por último, combinamos ambos en el ProductSchema final.
+export const ProductSchema = ProductRequired.merge(ProductOptional);
