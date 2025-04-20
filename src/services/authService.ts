@@ -55,7 +55,7 @@ const authService = {
   logout: async (): Promise<void> => {
     try {
       const refreshToken = localStorage.getItem('refresh_token');
-      if (refreshToken) {
+      if (refreshToken && refreshToken !== 'undefined') {
         await api.post(ApiPaths.LOGOUT, { refreshToken });
       }
     } catch (error) {
