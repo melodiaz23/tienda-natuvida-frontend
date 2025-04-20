@@ -1,31 +1,17 @@
-import ProductForm from "@/components/admin/products/ProductForm";
-import { productService } from "@/services/productService";
-import { ProductRequest } from "@/types/product.types";
+import ProductForm from '@/components/admin/products/ProductForm';
+import ProductProvider from '@/context/ProductContext';
 
-type PageProps = { params: Promise<{ id: string }> };
+type PageProps = { params: { id: string } };
 
 export default async function EditProductPage({ params }: PageProps) {
+  const { id } = params;
 
-  try {
-    console.log("Resolved params:", (await params).id);
-    const response = await productService.getProductById((await params).id);
-    const product = response.data;
 
-    if (!product) {
-      return <div>Product not found.</div>;
-    }
-
-    const productRequest: ProductRequest = {
-      ...product
-    };
-
-    return (
+  return (
+    <ProductProvider >
       <div>
-        <ProductForm mode="edit" initialData={productRequest} />
+        <ProductForm mode="edit" id={id} />
       </div>
-    );
-  } catch (error) {
-    console.error("Error fetching product:", error);
-    return <div>Error loading product. Please try again.</div>;
-  }
+    </ProductProvider>
+  );
 }
