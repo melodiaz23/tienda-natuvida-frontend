@@ -14,15 +14,12 @@ export function middleware(request: NextRequest) {
   }
 
   const protectedPaths = ['/mi-cuenta', '/orders'];
-  const adminPaths = ['/admin'];
 
   const isProtectedPath = protectedPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
   );
 
-  const isAdminPath = adminPaths.some(path =>
-    request.nextUrl.pathname.startsWith(path)
-  );
+  const isAdminPath = request.nextUrl.pathname.includes('/admin');
 
   // Verificar autenticación para rutas protegidas
   if (isProtectedPath && !token) {
@@ -39,7 +36,7 @@ export function middleware(request: NextRequest) {
 
     // Verificar si tiene rol de administrador
     if (userRole !== 'ADMIN') {
-      console.log(userRole);
+      console.log('Usuario sin permisos de administrador, redirigiendo');
       return NextResponse.redirect(new URL('/', request.url));
     }
   }
