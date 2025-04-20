@@ -50,19 +50,19 @@ export default function TagManager({ tags, onTagsChange, error }: TagManagerProp
         <button
           type="button"
           onClick={handleAddTag}
-          className="px-4 py-2 bg-green-dark text-white rounded-r-md"
+          className="px-4 py-2 bg-nv-green-light text-white rounded-r-md hover:bg-green-dark"
         >
           Añadir
         </button>
       </div>
       <div className="mt-2 flex flex-wrap gap-2">
         {tags.map((tag) => (
-          <div key={tag} className="bg-green-light/30 px-2 py-1 rounded-md flex items-center">
+          <div key={tag} className="bg-green-dark text-whiteygreen px-2 py-1 rounded-md flex items-center">
             <span>{tag}</span>
             <button
               type="button"
               onClick={() => handleRemoveTag(tag)}
-              className="ml-2 text-red-500 font-bold"
+              className="ml-2 text-whiteygreen font-bold"
             >
               ×
             </button>
@@ -71,7 +71,7 @@ export default function TagManager({ tags, onTagsChange, error }: TagManagerProp
       </div>
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <p className="text-sm text-gray-500 mt-1">
-        Las etiquetas ayudan a que los clientes encuentren más fácilmente tu producto
+        Incluye &quot;destacados&quot; si quieres que el producto aparezca en la página principal.
       </p>
     </div>
   );
