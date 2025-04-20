@@ -2,11 +2,9 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { LoginRequest, RegisterRequest, User } from '@/types/user.types';
 import authService from '@/services/authService';
-import { useRouter } from 'next/navigation';
 import { AuthContextType } from '@/types/auth.types';
 import { ApiErrorData, ApiResponse } from '@/types/api.types';
 import { AxiosError } from 'axios';
-import { toast } from 'react-toastify';
 import { handleApiError } from '@/utils/useHttpInterceptor';
 import userService from '@/services/userService';
 import useLocalStorage from '@/hooks/useLocalStorage';
@@ -23,7 +21,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const router = useRouter();
+
 
   // Initialize auth state from localStorage
   useEffect(() => {
@@ -50,18 +48,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.success && response.data) {
         setUser(response.data.user);
         setIsAuthenticated(true);
-        toast.success('Login exitoso!');
       } else {
         const errorMessage = response.message || 'Login falló';
         setError(errorMessage);
-        toast.error(errorMessage);
       }
       return response;
     } catch (err) {
       const error = err as AxiosError<ApiErrorData>;
       const errorMsg = handleApiError(error, "Error inesperado")
       setError(errorMsg);
-      toast.error(errorMsg);
       const errorResponse: ApiResponse<null> = {
         success: false,
         message: errorMsg,
@@ -78,19 +73,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setError(null);
     try {
       const response = await authService.register(userData);
-      if (response.success) {
-        toast.success(response.message || 'Registro exitoso!');
-      } else {
+      if (!response.success) {
         const errorMessage = response.message || 'Registro falló';
         setError(errorMessage);
-        toast.error(errorMessage);
       }
       return response;
     } catch (err) {
       const error = err as AxiosError<ApiErrorData>;
       const errorMsg = handleApiError(error, "Error en el registro");
       setError(errorMsg);
-      toast.error(errorMsg);
       const errorResponse: ApiResponse<null> = {
         success: false,
         message: errorMsg,
@@ -123,7 +114,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser(result.data);
         return result;
       } else {
-        toast.error(result.message || 'Error al actualizar el perfil');
         return result;
       }
     } catch (error) {
@@ -137,7 +127,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-      toast.error(errorMessage);
       console.error(error);
       return {
         success: false,
@@ -154,11 +143,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       await authService.logout();
       setUser(null);
       setIsAuthenticated(false);
-      router.push('/login');
-      toast.success('Sesión cerrada exitosamente');
     } catch (err) {
       console.error('Logout error:', err);
-      toast.error('Error al cerrar sesión');
     } finally {
       setLoading(false);
     }
