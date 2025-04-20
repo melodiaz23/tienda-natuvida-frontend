@@ -1,5 +1,5 @@
 'use client';
-import { Category, ProductImage, ProductRequest } from '@/types/product.types';
+import { Category, ProductImage } from '@/types/product.types';
 import { useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 import ProductImagesManager from './ProductImagesManager';
@@ -14,21 +14,27 @@ import TagManager from './TagManager';
 import PriceManager from './PriceManager';
 import IngredientManager from './IngredientManager';
 import BenefitManager from './BenefitManager';
+import { useProduct } from '@/hooks/useProduct';
+import ContraindicationsManager from './ContraindicationsManager';
+import BonusesManager from './BonusesManager';
 
 
 interface ProductFormProps {
   mode: 'create' | 'edit';
-  initialData?: ProductRequest;
+  id: string;
 }
 
-export const initialProductState = {
+export const initialProductState: z.infer<typeof ProductSchema> = {
   id: undefined,
   name: '',
+  customName: '', // Added customName to the initial state
   description: '',
   presentation: '',
   ingredients: [],
   benefits: [],
   tags: [],
+  bonuses: [],
+  contraindications: [],
   usageMode: '',
   price: {
     id: undefined,
@@ -41,11 +47,14 @@ export const initialProductState = {
   enabled: true
 };
 
-export default function ProductForm({ mode, initialData }: ProductFormProps) {
+export default function ProductForm({ mode, id }: ProductFormProps) {
   const [categoryOptions, setCategoryOptions] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string[]>([]);
 
   const router = useRouter();
+
+  const { getProductById } = useProduct();
+
 
   const schema = ProductSchema;
   const {
@@ -53,10 +62,11 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(schema),
-    defaultValues: initialData || initialProductState
+    defaultValues: initialProductState as z.infer<typeof ProductSchema>
   });
 
   // Observar valores para la UI
@@ -64,7 +74,8 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
   const ingredients = watch('ingredients') || [];
   const benefits = watch('benefits') || [];
   const prices = watch('price') || {};
-  // const categories = watch('categories') || [];
+  const bonuses = watch('bonuses') || [];
+  const contraindications = watch('contraindications') || [];
   const images = watch('images') || [];
 
   useEffect(() => {
@@ -81,17 +92,43 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    const loadProduct = async () => {
+      if (mode === 'edit' && id) {
+        try {
+          const productData = getProductById(id);
+          console.log(productData)
+          if (productData) {
+            const formattedData = {
+              ...productData,
+              categories: productData.categories.map(cat =>
+                typeof cat === 'string' ? cat : cat.id
+              )
+            };
+            setSelectedCategoryId(formattedData.categories);
+            reset(formattedData);
+          }
+        } catch (error) {
+          console.error("Error loading product:", error);
+          toast.error("Error al cargar el producto");
+        }
+      } else {
+        // Si estamos en modo creación, resetear al estado inicial
+        reset(initialProductState);
+      }
+    };
+    loadProduct();
+  }, [mode, id, getProductById, reset]);
 
 
   // Manejar categorías
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const categoryId = e.target.value;
-    setSelectedCategoryId([categoryId]);
-    if (categoryId) {
-      setValue('categories', [categoryId], { shouldValidate: true });
-    } else {
-      setValue('categories', [], { shouldValidate: true });
-    }
+    const selectedOptions = Array.from(e.target.selectedOptions);
+    const categoryIds = selectedOptions.map(option => option.value);
+
+    // Actualizar el estado y el valor del formulario
+    setSelectedCategoryId(categoryIds);
+    setValue('categories', categoryIds, { shouldValidate: true });
   };
 
   // Manejar imágenes
@@ -101,11 +138,28 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
 
   const submitHandler = async (data: z.infer<typeof schema>) => {
     const toastId = toast.loading('Guardando producto...');
+
+
+    const processedData = {
+      ...data,
+      customName: data.customName || '',
+      ingredients: data.ingredients || [],
+      benefits: data.benefits || [],
+      tags: data.tags || [],
+      bonuses: data.bonuses || [],
+      contraindications: data.contraindications || [],
+      categories: data.categories || [],
+      images: data.images || [],
+      enabled: data.enabled ?? true
+    };
+
+
     try {
-      if (mode === 'edit' && initialData?.id) {
-        await productService.updateProduct(initialData.id, data);
+      if (mode === 'edit' && id) {
+        await productService.updateProduct(id, processedData);
+
       } else {
-        await productService.createProduct(data);
+        await productService.createProduct(processedData);
       }
 
       toast.update(toastId, {
@@ -114,7 +168,7 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
         isLoading: false,
         autoClose: 3000,
       });
-      router.push('/dashboard/productos');
+      router.push('/admin/dashboard/productos');
     } catch (error) {
       console.error("Error saving product:", error);
       toast.update(toastId, {
@@ -127,20 +181,19 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
   };
 
   const handleCancel = () => {
-    router.push('/dashboard/productos');
+    router.push('/admin/dashboard/productos');
   };
 
   const handleDelete = async () => {
-    if (!initialData?.id) {
+    if (!id) {
       toast.error('Error al encontrar el producto');
       return;
     }
-
     try {
       if (confirm('¿Está seguro que desea eliminar este producto?')) {
-        await productService.deleteProduct(initialData.id);
+        await productService.deleteProduct(id);
         toast.success('Producto eliminado con éxito');
-        router.push('/dashboard/productos');
+        router.push('/admin/dashboard/productos');
       }
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -151,7 +204,16 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
   return (
     <div className="container mx-auto max-w-3xl">
       <div className="bg-white rounded-lg shadow-md p-6">
-        <form onSubmit={handleSubmit(submitHandler)} method="post">
+        <form
+          onSubmit={(e) => {
+            console.log("Form onSubmit raw event fired");
+            if (Object.keys(errors).length > 0) {
+              console.log("Form has validation errors:", errors);
+            }
+            handleSubmit(submitHandler)(e);
+          }}
+          method="post"
+        >
           <div className="mb-4">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
               Nombre
@@ -163,6 +225,19 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-dark focus:border-green-dark"
             />
             {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-1">
+              Nombre para URL:
+            </label>
+            <input
+              type="text"
+              id="customName"
+              placeholder="Nombre para URL"
+              {...register('customName')}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-dark focus:border-green-dark"
+            />
+            {errors.customName && <p className="text-red-500 text-sm">{errors.customName.message}</p>}
           </div>
 
           <div className="mb-4">
@@ -213,7 +288,9 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
               rows={1}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-dark focus:border-green-dark"
             />
-            {errors.presentation && <p className="text-red-500 text-sm">{errors.presentation.message}</p>}
+            {errors.presentation &&
+
+              <p className="text-red-500 text-sm">{errors.presentation.message}</p>}
           </div>
 
           <PriceManager
@@ -238,17 +315,58 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
               id="category-select"
               value={selectedCategoryId}
               onChange={handleCategoryChange}
+              multiple
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-dark focus:border-green-dark"
             >
-              <option value="">Seleccionar categoría</option>
               {categoryOptions.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
               ))}
             </select>
-            {errors.categories && <p className="text-red-500 text-sm">{errors.categories.message}</p>}
+
+            <div className="flex justify-end">
+              <p className="text-xs text-gray-500 mt-1 mr-2">
+                Para seleccionar múltiples categorías: Ctrl+clic (o Cmd+clic en Mac).
+                Para deseleccionar una categoría, haz Ctrl+clic (o Cmd+clic) en una opción ya seleccionada.
+              </p>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategoryId([]);
+                    setValue('categories', [], { shouldValidate: true });
+                  }}
+                  className="text-sm text-gray-500 hover:text-red-500"
+                >
+                  Limpiar selección
+                </button>
+              </div>
+
+            </div>
+            {errors.categories &&
+              Array.isArray(errors.categories) &&
+              errors.categories.map((error, index) => (
+                <p key={index} className="text-red-500 text-sm">{error.message}</p>
+              ))}
+
           </div>
+          <ContraindicationsManager
+            contraindications={contraindications}
+            onContraindicationsChange={(newContraindications) =>
+              setValue('contraindications', newContraindications, { shouldValidate: true })
+            }
+            error={errors.contraindications?.message?.toString()}
+          />
+
+          <BonusesManager
+            bonuses={bonuses}
+            onBonusesChange={(newBonuses) =>
+              setValue('bonuses', newBonuses, { shouldValidate: true })
+            }
+            error={errors.bonuses?.message?.toString()}
+          />
+
 
           <TagManager
             tags={tags}
@@ -264,7 +382,7 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
             >
               Cancelar
             </button>
-            {initialData?.id && <button
+            {id && <button
               type="button"
               onClick={handleDelete}
               className="px-4 py-2 bg-red-300 text-gray-900 rounded-md hover:bg-red-400"
@@ -273,7 +391,7 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
             </button>}
             <button
               type="submit"
-              className="px-4 py-2 bg-green-dark/90 text-white rounded-md hover:bg-green-dark focus:outline-none focus:ring-2 focus:ring-whiteygreen focus:ring-offset-2"
+              className="px-4 py-2 bg-nv-green-light text-white rounded-md hover:bg-green-dark focus:outline-none focus:ring-2 focus:ring-whiteygreen focus:ring-offset-2"
             >
               {mode === 'create' ? 'Crear' : 'Actualizar'}
             </button>

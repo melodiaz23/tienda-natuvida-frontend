@@ -1,10 +1,9 @@
-'use client';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Product } from '@/types/product.types';
 
 function ProductCard(product: Product) {
-
+  console.log(product);
 
   return (
     <Link href={`/admin/dashboard/productos/${product.id}`}>

@@ -78,13 +78,13 @@ export default function ProductImagesManager({ images, onChange, productName = '
                 <div className={`${image.isPrimary ? 'ring-1 ring-green-dark/60' : ''}`}>
                   <div className="relative h-32 w-full">
                     <Image
-                      src={image.imageUrl}
+                      src={image.imageUrl || "/placeholder.png"}
                       alt={image.altText || "Product image"}
                       fill
                       className="object-cover rounded-md"
                       onError={(e) => {
                         const imgElement = e.currentTarget as HTMLImageElement;
-                        imgElement.src = "/images/placeholder-product.jpg";
+                        imgElement.src = "/placeholder.png";
                       }}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
