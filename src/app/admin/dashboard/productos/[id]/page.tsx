@@ -1,10 +1,10 @@
 import ProductForm from '@/components/admin/products/ProductForm';
 import ProductProvider from '@/context/ProductContext';
 
-type PageProps = { params: { id: string } };
+type PageProps = { params: Promise<{ id: string }> };
 
 export default async function EditProductPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params;
 
 
   return (
