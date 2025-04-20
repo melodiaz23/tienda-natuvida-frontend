@@ -9,31 +9,44 @@ export interface Price {
 export interface Product {
   id: string;
   name: string;
+  customName: string;
   slug: string;
   description: string;
   presentation: string;
+  usageMode?: string;
   ingredients: string[];
   benefits: string[];
   tags: string[];
-  usageMode?: string;
+  bonuses: string[];
+  contraindications: string[];
   price: Price;
-  categories: string[]; // TODO: Check how to handle this in the API
+  categories: {
+    id: string;
+    name: string;
+    description?: string;
+    productIds: string[];
+    createdAt: string;
+    updatedAt: string;
+  }[];
   images: ProductImage[];
+  primaryImageUrl: string;
   enabled: boolean;
   createdAt: string;
   updatedAt: string;
-  primaryImageUrl?: string | null;
 }
 
 export interface ProductRequest {
   id?: string; // UUID en TypeScript
   name: string;
-  description: string;
-  presentation: string;
+  customName?: string;
+  description?: string;
+  presentation?: string;
+  usageMode?: string;
   ingredients: string[];
   benefits: string[];
   tags: string[];
-  usageMode?: string;
+  bonuses: string[];
+  contraindications: string[];
   price: Price;
   categories: string[];
   images: ProductImage[];
@@ -46,7 +59,7 @@ export interface ProductImage {
   altText?: string;
   displayOrder?: number;
   isPrimary?: boolean;
-  product?: Product;
+  // product?: Product;
 }
 
 
