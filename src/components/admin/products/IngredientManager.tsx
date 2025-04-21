@@ -63,7 +63,7 @@ export default function IngredientManager({
             <button
               type="button"
               onClick={() => handleRemoveIngredient(ingredient)}
-              className="ml-2 text-red-500 font-bold"
+              className="ml-2 text-green-dark font-bold"
             >
               ×
             </button>

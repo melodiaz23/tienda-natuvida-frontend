@@ -62,7 +62,7 @@ export default function BenefitManager({
             <button
               type="button"
               onClick={() => handleRemoveBenefit(benefit)}
-              className="ml-2 text-red-500 font-bold"
+              className="ml-2 text-green-dark font-bold"
             >
               ×
             </button>
