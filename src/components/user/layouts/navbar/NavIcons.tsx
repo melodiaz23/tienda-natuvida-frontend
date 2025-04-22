@@ -6,9 +6,8 @@ import CartModal from '@/components/cart/CartModal';
 import Search, { SearchSkeleton } from './Search';
 import { useAuth } from '@/context/AuthContext';
 
-
 export default function NavIcons() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const modalRef = useRef<HTMLDivElement>(null);
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -32,6 +31,15 @@ export default function NavIcons() {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
+
+  const isAdmin = () => {
+    return user?.role === 'ADMIN';
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsProfileOpen(false);
+  };
 
 
   return (
@@ -58,12 +66,13 @@ export default function NavIcons() {
             <div className='w-full cursor-pointer hover:bg-green-dark hover:text-whiteygreen px-3 py-2 rounded-md'>
               <Link href="/mi-cuenta">Mi cuenta</Link>
             </div>
-            {
-              <div className='w-full cursor-pointer hover:underline px-3 py-2 rounded-md'
-                onClick={() => {
-                  logout();
-                  setIsProfileOpen(!isProfileOpen)
-                }}>Salir</div>}
+            <div className='w-full cursor-pointer hover:bg-green-dark hover:text-whiteygreen px-3 py-2 rounded-md'>
+              {isAdmin() && (
+                <Link href="/admin/dashboard">Admin Dashboard</Link>
+              )}
+            </div>
+            <div className='w-full cursor-pointer hover:underline px-3 py-2 rounded-md'
+              onClick={handleLogout}>Salir</div>
           </div>
         )}
         <CartModal />
