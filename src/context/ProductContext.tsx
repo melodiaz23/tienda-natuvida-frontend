@@ -40,17 +40,15 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
       const response = await productService.getAllProducts();
       if (response.success && response.data) {
         setProducts(response.data);
-        // Filtrar productos destacados (puedes ajustar esta lógica según tu necesidad)
         const featured = response.data.filter(product =>
-          product.tags?.includes('featured') || product.tags?.includes('destacado')
+          product.tags?.includes('destacado')
         );
         setFeaturedProducts(featured);
       } else {
         setError(response.message || 'Error al cargar productos');
       }
     } catch (err) {
-      setError('Error al conectar con el servidor');
-      console.error('Error fetching products:', err);
+      setError('Error al conectar con el servidor: ' + err);
     } finally {
       setIsLoading(false);
     }
@@ -81,16 +79,11 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
   }, [products]);
 
   const getProductBySlug = useCallback(async (slug: string) => {
-    // Primero buscamos en productos ya cargados
     const productInState = products.find(product => product.slug === slug);
     if (productInState) return productInState;
-
-    // Si no está en estado, hacemos una petición específica
     setIsLoading(true);
     setError(null);
     try {
-      // Aquí asumimos que tienes un endpoint para buscar por slug
-      // Si no existe, podrías adaptar la lógica para buscar en todos los productos
       const response = await productService.getAllProducts();
       if (response.success && response.data) {
         const product = response.data.find(p => p.slug === slug);
@@ -106,7 +99,6 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
     }
   }, [products]);
 
-  // Cargar productos al montar el componente
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
