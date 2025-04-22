@@ -1,7 +1,7 @@
 
-export default function Price({ value }: { value: number }) {
+export default function Price({ value, className = 'text-2xl font-bold text-green-dark' }: { value: number, className?: string }) {
   return (
-    <span>
+    <span className={className}>
       {value.toLocaleString('es-CO', {
         style: 'currency',
         currency: 'COP',
