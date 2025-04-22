@@ -16,6 +16,9 @@ export default function OrderSuccessPage() {
         quantity: 2,
         unitPrice: 10000,
         subtotal: 20000,
+        price: {
+          unit: 10000,
+        }
       },
       {
         id: '2',
@@ -24,6 +27,9 @@ export default function OrderSuccessPage() {
         quantity: 1,
         unitPrice: 15000,
         subtotal: 15000,
+        price: {
+          unit: 15000
+        }
       },
     ],
     totalPrice: 35000,
