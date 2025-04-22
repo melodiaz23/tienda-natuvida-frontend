@@ -6,7 +6,7 @@ export interface User {
   phone?: string;
   createdAt: string; // LocalDateTime en formato string
   updatedAt: string;
-  role: Role;
+  role: 'USER' | 'ADMIN';
   enabled: boolean;
   customer: boolean;
   address?: string;
@@ -37,11 +37,6 @@ export interface Customer {
   enabled: boolean;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface Role {
-  id: number;
-  name: string;
 }
 
 export interface LoginRequest {
