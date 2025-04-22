@@ -4,6 +4,7 @@ import { RiSearchLine } from "react-icons/ri";
 // import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState, useRef, useEffect } from 'react';
 
+
 function SearchForm() {
   // const router = useRouter();
   // const searchParams = useSearchParams();
@@ -50,7 +51,7 @@ function SearchForm() {
             name="search"
             placeholder="Busca tú producto..."
             autoComplete="off"
-            autoFocus={isSearchOpen}
+            // autoFocus={isSearchOpen}
             // defaultValue={searchParams?.get('q') || ''}
             className="w-full rounded-lg border border-green-dark bg-white px-4 py-2 text-black placeholder:text-neutral-500 md:text-sm focus:outline-nv-green-light"
           />
