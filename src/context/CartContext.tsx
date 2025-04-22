@@ -5,9 +5,8 @@ import { Product } from '@/types/product.types';
 import { createContext, useCallback, useEffect, useState, useMemo } from 'react';
 import { useAuth } from './AuthContext';
 import { cartService } from '@/services/cartService';
-import { calculateCartItemPrices } from '@/components/utils/PriceCalculator'; // Asegúrate que la ruta es correcta
+import { calculateCartItemPrices } from '@/components/utils/PriceCalculator';
 
-// Define la interfaz para las props del proveedor si es necesario
 interface CartProviderProps {
   children: React.ReactNode;
 }
@@ -52,10 +51,8 @@ export default function CartProvider({ children }: CartProviderProps) {
 
   const syncCartWithServer = useCallback(async (): Promise<boolean> => {
     if (!isAuthenticated || items.length === 0) {
-      console.log('Sincronización omitida: Usuario no autenticado o carrito local vacío.');
-      return true; // Se considera éxito si no hay nada que sincronizar o no aplica
+      return true;
     }
-    console.log('Iniciando sincronización con el servidor...');
     setIsLoading(true);
     try {
       const itemRequests = items.map(item => ({
@@ -66,13 +63,10 @@ export default function CartProvider({ children }: CartProviderProps) {
       const response = await cartService.syncCartFromLocalStorage(itemRequests);
 
       if (response.success && response.data) {
-        console.log('Carrito sincronizado con éxito. Respuesta:', response.data);
-        // Actualiza el estado local y el localStorage con la respuesta del servidor
         setItems(response.data.items);
         return true;
       } else {
         console.error('Error en la respuesta del servidor al sincronizar:', response.message);
-        // TODO: Implementar TOAST para enviar mensaje
         return false;
       }
     } catch (error) {
@@ -94,6 +88,7 @@ export default function CartProvider({ children }: CartProviderProps) {
       if (response.success && response.data) {
         console.log('Carrito del servidor obtenido:', response.data);
         const serverItems = response.data.items || [];
+
         if (serverItems.length > 0) {
           console.log('Usando carrito del servidor.');
           setItems(serverItems);
@@ -104,135 +99,155 @@ export default function CartProvider({ children }: CartProviderProps) {
           console.log('Carrito del servidor y local vacíos.');
           setItems([]);
         }
+      } else {
+        console.error('Error en la respuesta del servidor:', response.message);
+        if (items.length > 0) {
+          await syncCartWithServer();
+        }
       }
     } catch (error) {
       console.error('Error al cargar carrito del servidor:', error);
-      // Mantener items locales si falla la carga
+      if (items.length > 0) {
+        await syncCartWithServer();
+      }
     } finally {
-      if (isLoading) setIsLoading(false);
+      setIsLoading(false);
       console.log('Carga/Sincronización inicial finalizada.');
     }
-  }, [isAuthenticated, items.length, setItems, syncCartWithServer, isLoading]); // Dependencias
+  }, [isAuthenticated, items, setItems, syncCartWithServer]);
 
   useEffect(() => {
     if (isAuthenticated) {
       loadCartOnLogin();
     } else {
       setIsCartModalOpen(false);
+      setItems([]);
     }
-    // No incluir loadCartOnLogin en las dependencias si solo debe correr al cambiar isAuthenticated
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
-  const addToCart = useCallback((product: Product, quantity: number = 1) => {
+  const addToCart = useCallback(async (product: Product, quantity: number = 1) => {
     setItems((prevItems) => {
-      const existingItemIndex = prevItems.findIndex((i) => i.productId === product.id); // Usa productId para buscar
+      const existingItemIndex = prevItems.findIndex((i) => i.productId === product.id);
       const newItems = [...prevItems];
 
       if (existingItemIndex > -1) {
         // Actualiza item existente
         const existingItem = newItems[existingItemIndex];
-        const newQuantity = existingItem.quantity + quantity;
+        const newQuantity = Math.min(existingItem.quantity + quantity, 5);
         const { subtotal, unitPrice } = calculateCartItemPrices(product.price, newQuantity);
         newItems[existingItemIndex] = {
           ...existingItem,
           quantity: newQuantity,
-          unitPrice,
+          unitPrice: unitPrice,
           subtotal,
         };
+        console.log('Item actualizado:', newItems[existingItemIndex]);
       } else {
-        // Agrega nuevo item
-        const { subtotal, unitPrice } = calculateCartItemPrices(product.price, quantity);
+        const limitedQuantity = Math.min(quantity, 5);
+        const { subtotal, unitPrice } = calculateCartItemPrices(product.price, limitedQuantity);
         const newItem: CartItem = {
-          id: product.id, // ¿Debería ser un ID único de línea de carrito o el ID del producto? Revisa tu modelo CartItem
+          id: product.id,
           productId: product.id,
           productName: product.name,
-          quantity: quantity,
+          quantity: limitedQuantity,
           unitPrice: unitPrice,
-          productPrice: product.price, // Guarda la estructura de precios completa
+          price: product.price,
           subtotal: subtotal,
-          // Añade otros detalles del producto si son necesarios (imagen, etc.)
+          productImageUrl: product.primaryImageUrl,
         };
         newItems.push(newItem);
       }
       return newItems;
     });
-    // No sincronizar aquí, solo abre el modal
+
     setTimeout(() => {
       setIsCartModalOpen(true);
     }, 250);
-  }, [setItems]); // Dependencia: setItems
 
-  const removeFromCart = useCallback((itemId: string) => { // Asume que itemId es el ID único del CartItem, o productId si así está modelado
+    if (isAuthenticated) {
+      try {
+        const itemRequest = {
+          productId: product.id,
+          quantity: quantity,
+        };
+        await cartService.addItemToCart(itemRequest);
+      } catch (error) {
+        console.error('Error al sincronizar producto con el servidor:', error);
+      }
+    }
+  }, [setItems, isAuthenticated]);
+
+  const removeFromCart = useCallback(async (itemId: string) => {
+
     setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-    // No sincronizar aquí
-  }, [setItems]); // Dependencia: setItems
 
-  const updateQuantity = useCallback((itemId: string, quantity: number) => { // Asume itemId es el ID único del CartItem
+    if (isAuthenticated) {
+      try {
+        await cartService.removeCartItem(itemId);
+      } catch (error) {
+        console.error('Error al eliminar producto del servidor:', error);
+      }
+    }
+  }, [setItems, isAuthenticated]);
+
+  const updateQuantity = useCallback(async (itemId: string, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(itemId);
       return;
     }
 
+    const limitedQuantity = Math.min(quantity, 5);
+
     setItems((prevItems) =>
       prevItems.map((item) => {
         if (item.id === itemId) {
-          if (!item.productPrice) {
+          if (!item.price) {
             console.error('Item price is undefined for item ID:', itemId);
-            return item; // Devuelve el item sin cambios si falta el precio
+            return item;
           }
-          const { subtotal, unitPrice } = calculateCartItemPrices(item.productPrice, quantity);
-          return { ...item, quantity, unitPrice, subtotal };
+          const { subtotal, unitPrice } = calculateCartItemPrices(item.price, limitedQuantity);
+          return { ...item, quantity: limitedQuantity, unitPrice, subtotal };
         }
         return item;
       })
     );
-    // No sincronizar aquí
-  }, [setItems, removeFromCart]); // Dependencias: setItems, removeFromCart
+
+    if (isAuthenticated) {
+      try {
+        await cartService.updateCartItemQuantity(itemId, limitedQuantity);
+      } catch (error) {
+        console.error('Error al actualizar cantidad en el servidor:', error);
+      }
+    }
+  }, [setItems, removeFromCart, isAuthenticated]);
 
   const clearCart = useCallback(async () => {
-    setItems([]); // Limpia estado local inmediato
-    setIsCartModalOpen(false); // Cierra modal si está abierto
+    setItems([]);
+    setIsCartModalOpen(false);
 
-    // Intenta limpiar en el servidor SI está autenticado
     if (isAuthenticated) {
       console.log('Intentando limpiar carrito en el servidor...');
-      setIsLoading(true); // Muestra feedback de carga
+      setIsLoading(true);
       try {
-        // Asumiendo que clearCart no necesita ID o lo obtiene del token/sesión
         await cartService.clearCart();
         console.log('Carrito limpiado en el servidor.');
       } catch (error) {
         console.error('Error al limpiar carrito en el servidor:', error);
-        // Podrías intentar sincronizar un carrito vacío si clear falla,
-        // o mostrar un error al usuario.
-        // await syncCartWithServer(); // Podría ser una opción de fallback
       } finally {
         setIsLoading(false);
       }
     }
-  }, [isAuthenticated, setItems, setIsLoading]); // Dependencias
-
-
-  // --- CÁLCULOS DERIVADOS (MEMORIZADOS) ---
+  }, [isAuthenticated, setItems, setIsLoading]);
 
   const getTotalItems = useCallback(() => {
     return items.reduce((total, item) => total + item.quantity, 0);
-  }, [items]); // Depende solo de 'items'
+  }, [items]);
 
   const getTotalPrice = useCallback(() => {
-    // Asegúrate que el cálculo aquí sea consistente con `calculateCartItemPrices`
-    // Usar item.subtotal podría ser más directo si siempre está actualizado
     return items.reduce((total, item) => total + item.subtotal, 0);
-    // Alternativa si subtotal no está disponible o se recalcula:
-    // return items.reduce((total, item) => total + (item.unitPrice * item.quantity), 0);
-  }, [items]); // Depende solo de 'items'
+  }, [items]);
 
-
-  // --- VALOR DEL CONTEXTO (MEMORIZADO) ---
-
-  // Usamos useMemo para evitar re-crear el objeto 'value' en cada render
-  // si las funciones o valores no han cambiado realmente.
   const value = useMemo(() => ({
     items,
     isLoading,
@@ -245,11 +260,11 @@ export default function CartProvider({ children }: CartProviderProps) {
     syncCartWithServer,
     isCartModalOpen,
     setIsCartModalOpen,
-    loadCartOnLogin, // Exponer si es necesario llamarla manualmente en algún otro lugar
+    loadCartOnLogin,
   }), [
     items, isLoading, addToCart, removeFromCart, updateQuantity, clearCart,
     getTotalItems, getTotalPrice, syncCartWithServer, isCartModalOpen, setIsCartModalOpen, loadCartOnLogin
-  ]); // Todas las dependencias del objeto value
+  ]);
 
 
   return (
