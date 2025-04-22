@@ -71,7 +71,7 @@ export default function CartModal() {
               <ul className="divide-y divide-gray-200">
                 {items.map((item) => (
                   <li key={item.id} className="py-4 flex gap-3">
-                    <div className="w-16 h-16 bg-gray-200 rounded-md flex-shrink-0">
+                    <div className="w-16 h-16 rounded-md flex-shrink-0">
                       <div className="absolute z-40 -ml-1 -mt-1">
                         <DeleteItemButton item={item} />
                       </div>
@@ -79,7 +79,8 @@ export default function CartModal() {
                         <Image
                           src={item.productImageUrl || "/placeholder.png"}
                           alt={item.productName}
-                          className="h-full w-auto object-cover"
+                          className="h-full w-auto object-cover "
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                           width={64}
                           height={64}
                         />
