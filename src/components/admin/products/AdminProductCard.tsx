@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Product } from '@/types/product.types';
-import AddToCartBtn from '../cart/AddToCartButton';
+import AddToCartBtn from '../../cart/AddToCartButton';
 
 
 export default function AdminProductCard({ product }: { product: Product }) {

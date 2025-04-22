@@ -4,17 +4,17 @@ import AddToCartBtn from '../cart/AddToCartButton';
 import Price from '../utils/Price';
 import { Product } from '@/types/product.types';
 
-interface ShopProductCardProps {
+interface BestSellersProductCardProps {
   product: Product;
   initialQuantity?: number;
   showAddToCart?: boolean;
 }
 
-export default function ShopProductCard({
+export default function BestSellersProductCard({
   product,
   initialQuantity = 1,
   showAddToCart = true
-}: ShopProductCardProps) {
+}: BestSellersProductCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
       <Link href={`/tienda/${product.slug}`}>
@@ -24,7 +24,7 @@ export default function ShopProductCard({
             alt={product.name}
             width={200}
             height={200}
-            className="object-contain h-48"
+            className="object-contain h-auto w-auto"
           />
         </div>
         <div className="p-6 text-center">
