@@ -1,4 +1,5 @@
 // app/(admin)/dashboard/page.tsx
+import { RefreshButton } from '@/components/common/RefreshButton';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
@@ -38,6 +39,18 @@ export default function AdminDashboard() {
           link="/admin/dashboard/categorias"
           icon="🏷️"
         />
+      </div>
+      <div className="my-8 bg-white p-6 rounded-lg shadow">
+        <h2 className="text-xl font-semibold mb-4">Acciones rápidas</h2>
+        <div className="flex flex-wrap gap-4">
+
+          <RefreshButton tag="products" />
+          {/* Puedes agregar otros botones de revalidación por categoría */}
+          <RefreshButton tag="categories" />
+        </div>
+        <p className="mt-4 text-sm text-gray-500">
+          Usar estos botones actualizará los datos mostrados en la tienda para todos los usuarios.
+        </p>
       </div>
     </div>
   );
