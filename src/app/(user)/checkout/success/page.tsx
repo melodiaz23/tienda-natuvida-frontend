@@ -156,14 +156,14 @@ export default function OrderSuccessPage() {
           <Link
             href={`https://api.whatsapp.com/send?phone=573208680091&text=Hola%2C%20mi%20pedido%20es%20el%20%23${cartInfo?.id || '  '},%20y%20quiero%20confirmarlo.%20Mi%20nombre%20es%20${clientInfo?.name || ''}`}
             target="_blank"
-            className="inline-block px-6 py-3 bg-green-dark text-white font-medium rounded-md hover:bg-nv-green-light transition-colors text-center"
+            className="inline-block px-6 py-3 bg-nv-green-light text-white font-medium rounded-md hover:bg-green-dark transition-colors text-center"
           >
             Confirma tu pedido para despachar más rápido
           </Link>
 
           <Link
             href="/"
-            className="inline-block px-6 py-3 bg-white text-green-dark border border-green-dark font-medium rounded-md hover:bg-green-50 transition-colors text-center"
+            className="inline-block px-6 py-3 bg-white text-green-dark border border-green-dark font-medium rounded-md hover:bg-nv-green-light hover:text-whiteygreen hover:border-nv-green-light transition-colors text-center"
           >
             Volver a la Tienda
           </Link>
