@@ -1,55 +1,86 @@
+'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Cart, CartStatus } from '@/types/cart.types';
-import Price from '@/components/utils/Price';
+import OrderDetails from '@/components/user/order/OrderDetails';
+import { Order } from '@/types/order.types';
+import { useEffect, useState } from 'react';
 
+import { FaWhatsapp } from 'react-icons/fa';
 
 export default function OrderSuccessPage() {
-  // Temporally using a hardcoded cartInfo and clientInfo
-  const cartInfo: Cart = {
-    id: '12345',
-    items: [
-      {
-        id: '1',
-        productId: '1',
-        productName: 'Producto 1',
-        quantity: 2,
-        unitPrice: 10000,
-        subtotal: 20000,
-        price: {
-          unit: 10000,
-        }
-      },
-      {
-        id: '2',
-        productId: '2',
-        productName: 'Producto 2',
-        quantity: 1,
-        unitPrice: 15000,
-        subtotal: 15000,
-        price: {
-          unit: 15000
-        }
-      },
-    ],
-    totalPrice: 35000,
-    status: CartStatus.CHECKOUT,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
+  const [order, setOrder] = useState<Order | null>(null);
 
-  const clientInfo = {
-    name: 'Juan Pérez',
-    phone: '1234567890',
-    address: 'Calle Falsa 123',
-    city: 'Bogotá',
-  };
+  useEffect(() => {
+    const getOrderWithExpiry = () => {
+      const orderStorage = sessionStorage.getItem('lastOrder');
+      if (!orderStorage) return null;
 
-  const date = new Date();
+      try {
+        const item = JSON.parse(orderStorage);
+        const now = new Date().getTime();
+
+        if (now > item.expiry) {
+          sessionStorage.removeItem('lastOrder');
+          return null;
+        }
+        return item.data;
+      } catch (error) {
+        sessionStorage.removeItem('lastOrder');
+        console.error('Error al parsear la orden:', error);
+        return null;
+      }
+    };
+
+    const orderData = getOrderWithExpiry();
+    if (orderData) {
+      setOrder(orderData);
+    }
+  }, []);
+
+  if (!order) {
+    return (
+      <div className="container mx-auto px-4 py-12 max-w-3xl">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center">
+          <Image
+            src="/compra-exitosa.png"
+            alt="Información de pedido"
+            width={100}
+            height={100}
+            className="mx-auto mb-4"
+          />
+
+          <h2 className="text-xl font-bold text-green-dark mb-3">No se encontraron detalles del pedido</h2>
+
+          <p className="text-gray-700 mb-6">
+            Si tienes dudas acerca de tu pedido o necesitas ayuda, contáctanos por WhatsApp
+            y te ayudaremos lo más pronto posible.
+          </p>
+
+          <div className="bg-green-50 p-4 rounded-md mb-4 text-left">
+            <h3 className="text-green-800 text-sm font-medium mb-2">Otros motivos por los que podrías ver este mensaje:</h3>
+            <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
+              <li>El enlace del pedido ha expirado</li>
+              <li>La información del pedido aún está procesándose</li>
+              <li>El pedido fue cancelado o eliminado</li>
+            </ul>
+          </div>
+
+          <Link
+            href="https://api.whatsapp.com/send?phone=573208680091&text=Hola%2C%20tengo%20dudas%20sobre%20mi%20pedido"
+            target="_blank"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-nv-green-light text-white font-medium rounded-md hover:bg-green-dark transition-colors"
+          >
+            <FaWhatsapp size={20} />
+            Contactar soporte
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-3xl">
-      <div className="bg-white p-8 rounded-lg shadow-md">
+      <div className="bg-white md:p-8 rounded-lg shadow-md">
         <div className="flex gap-4 justify-center items-center mb-8">
           <Image src="/compra-exitosa.png" alt="carrito" width={120} height={120} className="object-contain" priority />
           <div>
@@ -59,77 +90,10 @@ export default function OrderSuccessPage() {
             </p>
           </div>
         </div>
-        <div className="rounded-md mb-8">
-          <h2 className="text-xl font-bold text-green-dark mb-4">Datos de tu compra:</h2>
-          <div className="grid grid-cols-1 gap-4 text-gray-700">
-            <div>
-              <p className="flex gap-2">
-                <span className="font-bold">Fecha:</span>{' '}
-                {date.toLocaleDateString('es-CO')}
-              </p>
-              {clientInfo?.name && (
-                <p className="flex gap-2">
-                  <span className="font-bold">Nombre:</span>
-                  {clientInfo.name}
-                </p>
-              )}
-              {clientInfo?.phone && (
-                <p className="flex gap-2">
-                  <span className="font-bold">Teléfono:</span>
-                  {clientInfo.phone}
-                </p>
-              )}
-              {clientInfo?.address && (
-                <p className="flex gap-2">
-                  <span className="font-bold">Dirección:</span>
-                  {clientInfo.address}
-                </p>
-              )}
-              {clientInfo?.city && (
-                <p className="flex gap-2">
-                  <span className="font-bold">Ciudad:</span>
-                  {clientInfo.city}
-                </p>
-              )}
-              <p className="flex gap-2">
-                <span className="font-bold">Forma de pago:</span> Contraentrega
-              </p>
-            </div>
-          </div>
-        </div>
 
-        {cartInfo && cartInfo.items.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-xl font-bold text-green-dark mb-4">Resumen del pedido:</h2>
+        <OrderDetails order={order} />
 
-            <div className="flex gap-4 justify-between bg-green-light/30 rounded-md p-3 font-bold text-green-dark mb-2">
-              <div className="flex gap-4">
-                <div>Cant.</div>
-                <div>Producto</div>
-              </div>
-              <div>Precio</div>
-            </div>
-
-            {cartInfo.items.map((item) => (
-              <div className="flex gap-4 justify-between border-b py-3" key={item.id}>
-                <div className="flex gap-4">
-                  <div className="w-10 text-center">{item.quantity}</div>
-                  <div>{item.productName}</div>
-                </div>
-                <div>
-                  <Price value={item.subtotal} />
-                </div>
-              </div>
-            ))}
-
-            <div className="flex gap-4 justify-between bg-green-light/30 rounded-md p-3 mt-4 font-bold">
-              <span>Total a pagar:</span>
-              <Price value={cartInfo.totalPrice} />
-            </div>
-          </div>
-        )}
-
-        <div className="bg-green-50 p-6 rounded-md mb-8">
+        <div className="bg-green-50 p-6 rounded-md mb-8 mt-8">
           <h2 className="text-xl font-bold text-green-dark mb-4">¿Qué sigue?</h2>
 
           <ol className="list-decimal pl-5 space-y-3 text-gray-700">
@@ -154,7 +118,7 @@ export default function OrderSuccessPage() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href={`https://api.whatsapp.com/send?phone=573208680091&text=Hola%2C%20mi%20pedido%20es%20el%20%23${cartInfo?.id || '  '},%20y%20quiero%20confirmarlo.%20Mi%20nombre%20es%20${clientInfo?.name || ''}`}
+            href={`https://api.whatsapp.com/send?phone=573208680091&text=Hola%2C%20mi%20pedido%20es%20el%20%23${order?.orderNumber || 0},%20y%20quiero%20confirmarlo.%20Mi%20nombre%20es%20${order?.customer.firstName || ''}`}
             target="_blank"
             className="inline-block px-6 py-3 bg-nv-green-light text-white font-medium rounded-md hover:bg-green-dark transition-colors text-center"
           >
