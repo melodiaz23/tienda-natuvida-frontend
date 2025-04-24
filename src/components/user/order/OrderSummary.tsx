@@ -68,7 +68,7 @@ function CartItemRow({ item }: { item: CartItem }) {
         <p className="text-sm text-gray-500">Cantidad: {item.quantity}</p>
       </div>
       <div className="font-medium text-green-dark">
-        <Price value={parseFloat((item.unitPrice * item.quantity).toFixed(2))} />
+        <Price value={parseFloat((item.unitPrice * item.quantity).toFixed(2))} className='text-base' />
       </div>
     </div>
   );
@@ -105,7 +105,7 @@ export default function OrderSummary({ items, totalPrice }: OrderSummaryProps) {
       <div className="border-t border-gray-200 mt-6 pt-6">
         <div className="flex justify-between mb-2">
           <span className="text-sm text-gray-600">Subtotal</span>
-          <Price value={totalPrice} />
+          <Price value={totalPrice} className='text-base' />
         </div>
         <div className="flex justify-between mb-2">
           <span className="text-sm text-gray-600">Envío</span>
@@ -114,7 +114,7 @@ export default function OrderSummary({ items, totalPrice }: OrderSummaryProps) {
         <div className="flex justify-between text-lg font-bold mt-4">
           <span>Total</span>
           <span className="text-green-dark">
-            <Price value={totalPrice} />
+            <Price value={totalPrice} className='text-xl font-bold' />
           </span>
         </div>
       </div>
