@@ -86,7 +86,7 @@ export default function OrderForm({ onOrderSubmit, isSubmitting = false }: Order
           </div>
 
           <div>
-            <label htmlFor="nationalId" className="block text-sm font-medium text-gray-700 mb-1">Documento de Identidad (opcional)</label>
+            <label htmlFor="nationalId" className="block text-sm font-medium text-gray-700 mb-1">Documento de Identidad</label>
             <input
               type="text"
               id="nationalId"
@@ -166,7 +166,7 @@ export default function OrderForm({ onOrderSubmit, isSubmitting = false }: Order
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-green-dark text-whiteygreen py-2 px-4 rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-nv-green-light text-whiteygreen py-2 px-4 rounded-md hover:bg-green-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Procesando...' : 'Confirmar Pedido'}
           </button>
