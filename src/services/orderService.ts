@@ -31,7 +31,9 @@ export const orderService = {
 
   // Crear una nueva orden
   createOrder: async (orderRequest: OrderRequest): Promise<ApiResponse<Order>> => {
+    console.log("orderRequest", orderRequest);
     const response = await api.post(ApiPaths.ORDERS, orderRequest);
+    console.log("response", response);
     return response.data;
   },
 

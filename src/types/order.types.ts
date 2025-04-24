@@ -1,3 +1,4 @@
+import { Customer } from "./user.types";
 
 export interface OrderItem {
   id: string;
@@ -14,7 +15,7 @@ export interface Order {
   orderNumber: string;
   orderDate: string;
   customerId: string;
-  customerName: string;
+  customer: Customer;
   status: OrderStatus;
   totalAmount: number;
   items: OrderItem[];
@@ -45,7 +46,8 @@ export interface OrderItemRequest {
 }
 
 export interface OrderRequest {
-  customerId: string;
+  customerId?: string;
+  customer: Customer;
   shippingAddress: string;
   paymentMethod: PaymentMethod;
   items: OrderItemRequest[];

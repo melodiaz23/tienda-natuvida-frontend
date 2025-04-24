@@ -24,19 +24,18 @@ export interface ProfileRequest {
 }
 
 
-// src/types/customer.types.ts
 export interface Customer {
-  id: string;
-  userId: string;
+  id?: string;
+  userId?: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
   nationalId?: string;
   address: string;
   city: string;
-  enabled: boolean;
-  createdAt: string;
-  updatedAt: string;
+  enabled?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface LoginRequest {
