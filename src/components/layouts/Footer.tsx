@@ -46,9 +46,9 @@ export default async function Footer() {
           <div className="flex flex-col gap-8">
             <h2 className="font-medium text-lg">COMPAÑÍA</h2>
             <div className="flex flex-col gap-6">
-              <Link href="/">Acerca de nosotros</Link>
-              <Link href="/">Políticas de Privacidad</Link>
-              <Link href="/">Contáctanos</Link>
+              <Link href="/quienes-somos">Quienes somos</Link>
+              <Link href="/politica-de-privacidad">Políticas de Privacidad</Link>
+              <Link href="/terminos-y-condiciones">Términos y Condiciones</Link>
             </div>
           </div>
           <div className="flex flex-col gap-8">
