@@ -7,7 +7,9 @@ import ApiPaths from "@/utils/apiPaths";
 export const orderService = {
   // Obtener todas las órdenes
   getAllOrders: async (): Promise<ApiResponse<Order[]>> => {
+
     const response = await api.get(ApiPaths.ORDERS);
+    console.log("response", response);
     return response.data;
   },
 

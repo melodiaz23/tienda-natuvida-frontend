@@ -1,53 +1,63 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import OrdersInfo from "@/components/user/OrdersInfo";
-
-// import { signOutAction } from '@/app/actions';
-// import { useSession } from 'next-auth/react';
-// import HeaderDashboard from '@/app/dashboard/components/HeaderDashboard';
-// import dynamic from 'next/dynamic';
-// import SignIn from '@/components/SignIn';
-// import OrdersInfo from './components/OrdersInfo';
-
-// Dynamic imports for components
-// const HeaderDashboard = dynamic(
-//   () => import('@/app/dashboard/components/HeaderDashboard'),
-//   {
-//     ssr: false,
-//   }
-// );
-// const SignIn = dynamic(() => import('@/components/SignIn'), {
-//   ssr: false,
-// });
-// const OrdersInfo = dynamic(() => import('./components/OrdersInfo'), {
-//   ssr: false,
-// });
+import { orderService } from "@/services/orderService";
+import { Order } from "@/types/order.types";
 
 export default function Dashboard() {
-  // const { data: session } = useSession();
-  // const userName = session?.user?.name;
-  // const email = session?.user?.email;
-  // const image = session?.user?.image;
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await orderService.getAllOrders();
+        setOrders(response.data || []);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        setError('Error al cargar las órdenes');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full justify-center p-3">
+        <h1 className="text-3xl font-bold p-4 text-center">Cargando órdenes...</h1>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full justify-center p-3">
+        <h1 className="text-3xl font-bold p-4 text-center text-red-500">{error}</h1>
+      </div>
+    );
+  }
+
+  if (!orders || orders.length === 0) {
+    return (
+      <div className="w-full justify-center p-3">
+        <h1 className="text-3xl font-bold p-4 text-center">No hay órdenes</h1>
+      </div>
+    );
+  }
 
   return (
-    // <>
-    //   {session ? (
-    <div>
-      {/* <HeaderDashboard
-            userName={userName}
-            email={email}
-            image={image}
-          /> */}
+    <>
       <div className="w-full justify-center p-3">
         <h1 className="text-3xl font-bold p-4 text-center">Orders</h1>
         <div className="p-3 lg:p-12">
-          <OrdersInfo />
+          <OrdersInfo orders={orders} />
         </div>
       </div>
-    </div>
-    //   ) : (
-    //     <SignIn />
-    //   )}
-    // </>
+    </>
   );
 }
