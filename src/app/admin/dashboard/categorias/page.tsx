@@ -1,13 +1,39 @@
+'use client'; // ← Agregar esta línea
+
+import { useEffect, useState } from 'react';
 import { categoryService } from "@/services/categoryService";
 import CreateUpdateCategoriesForm from "@/components/admin/categories/CreateUpdateCategoriesForm";
 import CategoryCard from "@/components/admin/categories/CategoryCard";
+import { Category } from '@/types/product.types';
 
-export default async function AdminCategoriesPage() {
-  const response = await categoryService.getAllCategories();
-  const categories = response.data;
 
-  if (!categories) {
-    return <div>No hay categorías disponibles.</div>;
+export default function AdminCategoriesPage() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await categoryService.getAllCategories();
+        setCategories(response.data || []);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        setError('Error al cargar las categorías');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  if (loading) {
+    return <div className="p-4">Cargando categorías...</div>;
+  }
+
+  if (error) {
+    return <div className="p-4 text-red-500">{error}</div>;
   }
 
   return (
