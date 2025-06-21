@@ -4,12 +4,7 @@ import ApiPaths from './apiPaths';
 const createApiInstance = () => {
 
   const getBaseUrl = () => {
-    const isDevelopment = process.env.NODE_ENV === 'development';
-    if (isDevelopment) {
-      return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
-    } else {
-      return process.env.NEXT_PUBLIC_PRODUCTION_API_URL;
-    }
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
   };
 
   const instance = axios.create({
