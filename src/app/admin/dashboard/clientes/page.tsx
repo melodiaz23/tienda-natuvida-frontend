@@ -1,4 +1,4 @@
-'use client'; // ← Agregar esta línea
+'use client';
 
 import { useEffect, useState } from 'react';
 import AdminProductCard from "@/components/admin/products/AdminProductCard";
