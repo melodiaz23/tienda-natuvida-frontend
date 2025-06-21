@@ -24,6 +24,12 @@
       "@headlessui/react": ["./node_modules/@headlessui/react"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/components/product/ImageUploader.jsx"
+  ],
   "exclude": ["node_modules"]
 }
