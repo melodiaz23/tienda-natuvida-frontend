@@ -18,7 +18,6 @@ const getOffers = unstable_cache(
   },
   ['special-offers'],
   {
-    revalidate: 3600, // Revalida cada hora
     tags: ['products'] // Tag para revalidación manual
   }
 );

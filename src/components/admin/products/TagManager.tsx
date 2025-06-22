@@ -71,7 +71,7 @@ export default function TagManager({ tags, onTagsChange, error }: TagManagerProp
       </div>
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <p className="text-sm text-gray-500 mt-1">
-        Incluye &quot;destacado&quot; si quieres que el producto aparezca en la página principal.
+        Incluye &quot;destacado&quot; si quieres que el producto aparezca en la página principal o &quot;imperdible&quot; para ofertas imperdible.
       </p>
     </div>
   );
