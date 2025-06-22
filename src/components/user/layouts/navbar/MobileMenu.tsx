@@ -2,11 +2,11 @@
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Fragment, Suspense, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 import { Bars3Icon } from '@heroicons/react/24/outline';
 
-import Search, { SearchSkeleton } from './Search';
+// import Search, { SearchSkeleton } from './Search';
 
 
 type Menu = {
@@ -79,12 +79,16 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-[-100%]"
           >
-            <DialogPanel className="fixed  bg-green-dark text-whiteygreen left-0 top-20 w-full h-[calc(100vh-80px)] flex flex-col items-center justify-center gap-8 text-xl z-10 ">
-              <div className="mb-4 w-4/5">
+            <DialogPanel className="fixed left-0 top-20 w-full h-[calc(100vh-80px)] flex flex-col items-center justify-center gap-8 text-xl z-10 "
+              style={{
+                backgroundColor: '#133e29', // Ejemplo: verde oscuro
+                color: 'rgb(245, 255, 250)', // Ejemplo: blanco verdoso
+              }}>
+              {/* <div className="mb-4 w-4/5">
                 <Suspense fallback={<SearchSkeleton />}>
                   <Search />
                 </Suspense>
-              </div>
+              </div> */}
               {menu.length ? (
                 <ul className="flex w-full flex-col items-center">
                   {menu.map((item: Menu) => (

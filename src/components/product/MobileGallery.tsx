@@ -32,7 +32,7 @@ export function MobileGallery({ images }: MobileGalleryProps) {
   });
 
   return (
-    <div className="md:hidden" {...swipeHandlers}>
+    <div className="w-full" {...swipeHandlers}>
       <div className="relative aspect-square w-full overflow-hidden bg-white">
         {images[imageIndex] && (
           <Image

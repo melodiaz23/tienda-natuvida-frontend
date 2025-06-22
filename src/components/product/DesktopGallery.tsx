@@ -12,7 +12,7 @@ export function DesktopGallery({ images }: DesktopGalleryProps) {
 
   return (
     <>
-      <div className="hidden md:flex flex-col gap-2 mr-4 w-24">
+      <div className="gap-2 mr-4 w-24">
         {images.map((image, index) => (
           <div
             key={index}
@@ -29,8 +29,8 @@ export function DesktopGallery({ images }: DesktopGalleryProps) {
             />
           </div>
         ))}
-      </div>
 
+      </div>
       {/* Imagen principal grande */}
       <div className="flex-1 bg-white rounded-lg overflow-hidden">
         <div className="relative aspect-square border border-gray-200 shadow-sm">
