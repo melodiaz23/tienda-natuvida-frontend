@@ -1,57 +1,68 @@
-
 import { validateEnvironmentVariables } from '@/lib/utils';
 import { MetadataRoute } from 'next';
-
-// todo: Add collections, products and pages
-// type Route = {
-//   url: string;
-//   lastModified: string;
-// };
-
-const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : 'http://localhost:3000';
+import { productService } from '@/services/productService';
+import { categoryService } from '@/services/categoryService';
 
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   validateEnvironmentVariables();
 
-  const routesMap = [''].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString()
-  }));
+  // Base URL from environment variables with fallback
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ||
+    (process.env.NEXT_PUBLIC_VERCEL_URL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+      : 'http://localhost:3000');
 
-  // TODO: Add collections, products and pages
-  // const collectionsPromise = getCollections().then((collections) =>
-  //   collections.map((collection) => ({
-  //     url: `${baseUrl}${collection.path}`,
-  //     lastModified: collection.updatedAt
-  //   }))
-  // );
 
-  // const productsPromise = getProducts({}).then((products) =>
-  //   products.map((product) => ({
-  //     url: `${baseUrl}/product/${product.handle}`,
-  //     lastModified: product.updatedAt
-  //   }))
-  // );
+  const staticRoutes = [
+    {
+      url: `${baseUrl}`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'daily' as const,
+      priority: 1.0
+    },
+    {
+      url: `${baseUrl}/tienda`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'daily' as const,
+      priority: 0.9
+    },
+  ];
 
-  // const pagesPromise = getPages().then((pages) =>
-  //   pages.map((page) => ({
-  //     url: `${baseUrl}/${page.handle}`,
-  //     lastModified: page.updatedAt
-  //   }))
-  // );
+  let productRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const productsResponse = await productService.getAllProducts();
 
-  // let fetchedRoutes: Route[] = [];
+    if (productsResponse.success && productsResponse.data) {
+      productRoutes = productsResponse.data.map(product => ({
+        url: `${baseUrl}/productos/${product.slug || product.id}`,
+        lastModified: product.updatedAt || new Date().toISOString(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8
+      }));
+    }
+  } catch (error) {
+    console.error('Error fetching products for sitemap:', error);
+  }
 
-  // try {
-  //   fetchedRoutes = (await Promise.all([collectionsPromise, productsPromise, pagesPromise])).flat();
-  // } catch (error) {
-  //   throw JSON.stringify(error, null, 2);
-  // }
+  let categoryRoutes: MetadataRoute.Sitemap = [];
+  try {
+    if (typeof categoryService !== 'undefined') {
+      const categoriesResponse = await categoryService.getAllCategories();
 
-  // return [...routesMap, ...fetchedRoutes];
-  return [...routesMap];
+      if (categoriesResponse.success && categoriesResponse.data) {
+        categoryRoutes = categoriesResponse.data.map(category => ({
+          url: `${baseUrl}/categorias/${category.name || category.id}`,
+          lastModified: category.updatedAt || new Date().toISOString(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.8
+        }));
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching categories for sitemap:', error);
+  }
+
+  return [...staticRoutes, ...productRoutes, ...categoryRoutes];
 }

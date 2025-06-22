@@ -29,12 +29,13 @@ export const metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     default: SITE_NAME!,
-    description: 'Tienda de productos naturales y suplementos alimenticios',
     template: `%s | ${SITE_NAME}`,
     icons: {
       icon: '/icon.svg'
     }
   },
+  description: 'Tienda de productos naturales y suplementos alimenticios',
+  kewords: ['suplementos', 'productos naturales', 'salud', 'bienestar', 'nutrición'],
   alternates: {
     canonical: '/',
     languages: {
@@ -59,9 +60,35 @@ export const metadata = {
       },
     ],
   },
+  openGraph: {
+    title: SITE_NAME,
+    description: 'Tienda de productos naturales y suplementos alimenticios',
+    url: baseUrl,
+    siteName: SITE_NAME,
+    images: [
+      {
+        url: `${baseUrl}/healthy-hair.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Tienda de productos naturales y suplementos alimenticios',
+      },
+    ],
+    locale: 'es_CO',
+    type: 'website',
+  },
+  icons: {
+    icon: '/icon.svg',
+
+  },
   robots: {
+    index: true,
     follow: true,
-    index: true
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 
 };
