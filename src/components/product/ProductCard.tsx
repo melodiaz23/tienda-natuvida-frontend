@@ -12,10 +12,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
 
-
   return (
     <div className="flex flex-col w-full bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg">
-      <Link href={`/producto/${product.slug || product.id}`} className="block overflow-hidden relative pt-[100%]">
+      <Link href={`/tienda/${product.slug || product.id}`} className="block overflow-hidden relative pt-[100%]">
         <div className="absolute inset-0 flex items-center justify-center p-4">
           {product.primaryImageUrl ? (
             <Image
