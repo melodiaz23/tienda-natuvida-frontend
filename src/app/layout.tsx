@@ -1,4 +1,5 @@
 import { Inter, Open_Sans } from 'next/font/google';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 // import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 import Providers from './providers/Providers';
@@ -73,6 +74,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Providers>
           <main>
             {children}
+            <SpeedInsights />
           </main>
         </Providers>
       </body>
