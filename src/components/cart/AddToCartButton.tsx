@@ -38,7 +38,7 @@ const AddToCartBtn = ({
       onClick={handleAddToCart}
       disabled={isLoading}
       size='md'
-      className={`${className || " bg-green-dark text-white! font-bold text-l text-center"}`}
+      className={`bg-nv-green-light text-whiteygreen! font-semibold text-nv-green-dark hover:bg-nv-green ${className}`}
     >
       {isLoading ? "Agregando..." : text}
     </Button>

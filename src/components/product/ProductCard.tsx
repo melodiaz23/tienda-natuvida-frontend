@@ -44,7 +44,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <div className='mt-4 flex justify-center'>
-          <AddToCartBtn product={product} className='w-fit py-2 px-4  border border-nv-green-light hover:bg-green-dark hover:text-white hover:border-transparent rounded-4xl' />
+          <AddToCartBtn product={product} />
         </div>
       </div>
     </div>
