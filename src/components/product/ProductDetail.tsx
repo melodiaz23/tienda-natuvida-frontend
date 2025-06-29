@@ -1,11 +1,13 @@
 'use client';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Product } from '@/types/product.types';
 import AddToCartBtn from '../cart/AddToCartButton';
 import EditQuantityButton from '../cart/EditQuantityButton';
 import { MobileGallery } from './MobileGallery';
 import { DesktopGallery } from './DesktopGallery';
+import { Tabs, Tab } from "@heroui/tabs";
 import Price from '../utils/Price';
+import { Card, CardBody } from '@heroui/react';
 
 interface ProductDetailProps {
   product: Product;
@@ -36,7 +38,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
 
   // Contenido de cada tab
-  const tabContent: Record<string, React.ReactNode> = {
+  const tabContent: Record<string, ReactNode> = {
     usageMode: product.usageMode ? (
       <p className="text-gray-600">{product.usageMode}</p>
     ) : <p className="text-gray-400">No especificado.</p>,
@@ -95,24 +97,31 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             <p className="text-gray-600">{product.description}</p>
           </div>
         </div>
-        <div className="md:col-span-2 md:min-h-[500px] mt-10 md:mt-0 w-full md:px-20">
-          <div className="flex border-b border-gray-200 mb-4 overflow-x-auto">
-            {TABS.map(tab => (
-              <button
-                key={tab.key}
-                className={`px-4 py-2 font-semibold transition-colors whitespace-nowrap
-                ${activeTab === tab.key
-                    ? 'border-b-2 border-nv-green-light text-nv-green-light'
-                    : 'text-gray-500 hover:text-nv-green-light'}`}
-                onClick={() => setActiveTab(tab.key)}
-              >
-                {tab.label}
-              </button>
-            ))}
+        <div className="md:col-span-2 md:min-h-[500px] w-full mt-10 md:mt-0 md:px-20">
+          <div className='overflow-x-auto'>
+            <Tabs aria-label='Options'
+              selectedKey={activeTab}
+              onSelectionChange={(key) => setActiveTab(String(key))}
+              className='bg-white flex flex-col md:flex-row'
+            // classNames={{
+            //   tabContent: 'shadow-none'
+            // }}
+            >
+              {TABS.map(tab => (
+                <Tab key={tab.key} title={tab.label} className=''
+                >
+                  <Card shadow='sm'>
+                    <CardBody>
+                      {tabContent[tab.key]}
+                    </CardBody>
+
+                  </Card>
+                </Tab>
+              )
+              )}
+            </Tabs>
           </div>
-          <div className="bg-white rounded-xl p-6 min-h-[120px]">
-            {tabContent[activeTab]}
-          </div>
+
         </div>
 
       </div>

@@ -1,7 +1,9 @@
 import React from 'react';
-import Slider from '@/components/user/Slider';
+import Slider from '@/app/(user)/tienda/_components/Slider';
 import BestSellers from '@/components/product/BestSellers';
 import SpecialOffers from '@/components/product/SpecialOffers';
+import FooterLanding from '@/components/landing/FooterLanding';
+import Testimonials from './tienda/_components/Testimonials';
 
 
 export const metadata = {
@@ -24,6 +26,12 @@ export default function Homepage() {
       </section>
       <section>
         <SpecialOffers />
+      </section>
+      <section>
+        <Testimonials />
+      </section>
+      <section>
+        <FooterLanding />
       </section>
     </>
 

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { Product } from '@/types/product.types';
 import { toast } from 'react-toastify';
-
+import { Button } from "@heroui/button";
 
 interface AddToCartBtnProps {
   product: Product;
@@ -34,13 +34,14 @@ const AddToCartBtn = ({
   };
 
   return (
-    <button
+    <Button
       onClick={handleAddToCart}
       disabled={isLoading}
-      className={`${className || "w-full bg-gray-950 text-white font-bold text-l p-2 rounded text-center"}`}
+      size='md'
+      className={`bg-nv-green-light text-whiteygreen! font-semibold text-nv-green-dark hover:bg-nv-green ${className}`}
     >
       {isLoading ? "Agregando..." : text}
-    </button>
+    </Button>
   );
 };
 

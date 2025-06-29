@@ -36,7 +36,7 @@ export default function BestSellersProductCard({
       </Link>
       {showAddToCart && (
         <div className="p-4 border-t border-gray-100 flex justify-center items-center">
-          <AddToCartBtn product={product} prodQuantity={initialQuantity} className='text-green-dark rounded-4xl border py-2 px-4 hover:bg-nv-green-light hover:text-whiteygreen' />
+          <AddToCartBtn product={product} prodQuantity={initialQuantity} className='' />
         </div>
       )}
     </div>
