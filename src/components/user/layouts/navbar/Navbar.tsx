@@ -22,7 +22,7 @@ export default async function Navbar() {
               priority
             />
           </Link>
-          <MobileMenu menu={[{ title: 'Inicio', path: '/' }, { title: 'Tienda', path: '/tienda' }, { title: "Mi cuenta", path: "/mi-cuenta" }, { title: 'Mi Carrito', path: '/checkout' }]} />
+          <MobileMenu menu={[{ title: 'Inicio', path: '/' }, { title: 'Tienda', path: '/tienda' }, { title: 'Contacto', path: '/contacto' }, { title: "Mi cuenta", path: "/mi-cuenta" }, { title: 'Mi Carrito', path: '/checkout' }]} />
         </div>
 
         {/* DESKTOP */}
@@ -42,7 +42,7 @@ export default async function Navbar() {
               <Link href="/" className="text-nv-green-light font-medium hover:text-green-light">Inicio</Link>
               <Link href="/tienda" className="text-nv-green-light font-medium hover:text-green-light">Tienda</Link>
               <Link href="/" className="text-nv-green-light font-medium hover:text-green-light">Ofertas</Link>
-              <Link href="/" className="text-nv-green-light font-medium hover:text-green-light">Contacto</Link>
+              <Link href="/contacto" className="text-nv-green-light font-medium hover:text-green-light">Contacto</Link>
             </div>
           </div>
           <div className="w-2/3 xl:w-1/2 flex items-center gap-8 justify-end">

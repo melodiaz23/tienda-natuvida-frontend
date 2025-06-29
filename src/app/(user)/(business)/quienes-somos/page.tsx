@@ -1,9 +1,13 @@
+import { Button } from "@heroui/button";
+import Link from "next/link";
+
+
 export default function QuienesSomos() {
   return (
     <div className="container mx-auto py-12 px-4 md:px-8">
       {/* Encabezado */}
       <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-green-800 mb-4">Quiénes Somos</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-nv-green-light mb-4">Quiénes Somos</h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
           Conoce la historia detrás de Natuvida, una familia comprometida con tu bienestar y salud natural.
         </p>
@@ -12,7 +16,7 @@ export default function QuienesSomos() {
       {/* Nuestra Historia */}
       <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
         <div className="order-2 md:order-1">
-          <h2 className="text-3xl font-bold text-green-700 mb-6">Nuestra Historia</h2>
+          <h2 className="text-3xl font-bold text-nv-green-light mb-6">Nuestra Historia</h2>
           <p className="mb-4 text-gray-700">
             Natuvida nació en el seno de nuestra familia, impulsada por una profunda pasión por el bienestar y la salud natural.
             Lo que comenzó como una búsqueda personal de alternativas saludables para nuestra propia familia, se transformó
@@ -38,10 +42,10 @@ export default function QuienesSomos() {
       </div>
 
       {/* Misión y Visión */}
-      <div className="bg-green-50 rounded-xl p-8 md:p-12 mb-20">
+      <div className="bg-green-light/30 rounded-xl p-8 md:p-12 mb-20">
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h2 className="text-3xl font-bold text-green-700 mb-6">Nuestra Misión</h2>
+            <h2 className="text-3xl font-bold text-nv-green-light mb-6">Nuestra Misión</h2>
             <p className="text-gray-700">
               En Natuvida, nos dedicamos a empoderar a las personas en su camino hacia una vida más saludable,
               proporcionando productos naturales de la más alta calidad y compartiendo conocimientos sobre el
@@ -49,7 +53,7 @@ export default function QuienesSomos() {
             </p>
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-green-700 mb-6">Nuestra Visión</h2>
+            <h2 className="text-3xl font-bold text-nv-green-light mb-6">Nuestra Visión</h2>
             <p className="text-gray-700">
               Aspiramos a ser reconocidos como el referente nacional en soluciones naturales para el bienestar,
               creando una comunidad educada y consciente sobre la importancia de incorporar lo natural en su estilo
@@ -61,7 +65,7 @@ export default function QuienesSomos() {
 
       {/* Nuestros Valores */}
       <div className="mb-20">
-        <h2 className="text-3xl font-bold text-green-700 mb-8 text-center">Nuestros Valores</h2>
+        <h2 className="text-3xl font-bold text-nv-green-light mb-8 text-center">Nuestros Valores</h2>
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-white p-6 rounded-lg shadow-md text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -69,7 +73,7 @@ export default function QuienesSomos() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-green-700 mb-3">Autenticidad</h3>
+            <h3 className="text-xl font-semibold text-nv-green-light mb-3">Autenticidad</h3>
             <p className="text-gray-600">
               Promovemos productos genuinamente naturales, respetando siempre la transparencia en nuestra comunicación.
             </p>
@@ -81,7 +85,7 @@ export default function QuienesSomos() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-green-700 mb-3">Bienestar Integral</h3>
+            <h3 className="text-xl font-semibold text-nv-green-light mb-3">Bienestar Integral</h3>
             <p className="text-gray-600">
               Creemos en el equilibrio entre cuerpo y mente como base fundamental de una vida plena y saludable.
             </p>
@@ -93,7 +97,7 @@ export default function QuienesSomos() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-green-700 mb-3">Espíritu Familiar</h3>
+            <h3 className="text-xl font-semibold text-nv-green-light mb-3">Espíritu Familiar</h3>
             <p className="text-gray-600">
               Tratamos a nuestros clientes como parte de nuestra familia, con cercanía, calidez y compromiso.
             </p>
@@ -111,7 +115,7 @@ export default function QuienesSomos() {
           </div>
         </div> */}
         <div>
-          <h2 className="text-3xl font-bold text-green-700 mb-6">Nuestro Compromiso</h2>
+          <h2 className="text-3xl font-bold text-nv-green-light mb-6">Nuestro Compromiso</h2>
           <p className="mb-4 text-gray-700">
             En Natuvida, nos comprometemos a seleccionar cuidadosamente cada uno de nuestros productos,
             garantizando su origen natural y beneficios reales para la salud. Trabajamos directamente con
@@ -130,15 +134,17 @@ export default function QuienesSomos() {
       </div>
 
       {/* Únete a Nuestra Familia */}
-      <div className="text-center bg-green-700 text-white rounded-xl p-8 md:p-12">
+      <div className="text-center bg-nv-green-light text-white rounded-xl p-8 md:p-12">
         <h2 className="text-3xl font-bold mb-6">Únete a la Familia Natuvida</h2>
         <p className="max-w-3xl mx-auto mb-8 text-green-50">
           Te invitamos a ser parte de nuestra comunidad comprometida con el bienestar natural.
           Descubre nuestros productos y conoce más sobre cómo cuidar tu salud de manera integral.
         </p>
-        <button className="bg-white text-green-700 font-semibold py-3 px-8 rounded-lg hover:bg-green-100 transition duration-300">
-          Explora Nuestros Productos
-        </button>
+        <Link href="/tienda">
+          <Button className="bg-white text-nv-green-light font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+            Explora Nuestros Productos
+          </Button>
+        </Link>
       </div>
     </div>
   );
