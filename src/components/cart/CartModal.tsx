@@ -100,9 +100,6 @@ export default function CartModal() {
                       <p className="text-sm text-gray-500">
                         Cantidad: {item.quantity}
                       </p>
-                      <p className="text-sm font-medium mt-1">
-                        <Price value={parseFloat((item.unitPrice * item.quantity).toFixed(2))} />
-                      </p>
                     </div>
                   </li>
                 ))}
