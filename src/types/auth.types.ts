@@ -1,4 +1,4 @@
-import { ProfileSchema } from "@/lib/schemas/registerSchema";
+import { ProfileSchema } from "@/app/(user)/(auth)/login/_schemas/registerSchema";
 import { ApiResponse } from "./api.types";
 import { AuthResponse, LoginRequest, RegisterRequest, User } from "./user.types";
 

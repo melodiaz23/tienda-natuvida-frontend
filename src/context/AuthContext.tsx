@@ -8,7 +8,7 @@ import { AxiosError } from 'axios';
 import { handleApiError } from '@/utils/useHttpInterceptor';
 import userService from '@/services/userService';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { ProfileSchema } from '@/lib/schemas/registerSchema';
+import { ProfileSchema } from '@/app/(user)/(auth)/login/_schemas/registerSchema';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

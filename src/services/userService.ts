@@ -3,7 +3,7 @@ import api from '@/utils/api';
 import ApiPaths from '@/utils/apiPaths';
 import { ApiResponse } from '@/types/api.types';
 import { User } from '@/types/user.types';
-import { ProfileSchema } from '@/lib/schemas/registerSchema';
+import { ProfileSchema } from '@/app/(user)/(auth)/login/_schemas/registerSchema';
 
 const userService = {
   getAllUsers: async (): Promise<ApiResponse<User[]>> => {

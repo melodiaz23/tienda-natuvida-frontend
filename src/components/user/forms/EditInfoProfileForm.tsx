@@ -2,7 +2,7 @@
 
 import LoadingDots from "@/components/common/LoadingDots";
 import { useAuth } from "@/context/AuthContext";
-import { profileSchema, ProfileSchema } from "@/lib/schemas/registerSchema"
+import { profileSchema, ProfileSchema } from "@/app/(user)/(auth)/login/_schemas/registerSchema"
 import { ApiErrorData, ApiResponse } from "@/types/api.types";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AxiosError } from "axios";
